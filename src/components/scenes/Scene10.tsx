@@ -44,7 +44,7 @@ export default function Scene10() {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter gold-shimmer-text drop-shadow-sm text-center"
+          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-gray-900 drop-shadow-xl text-center"
         >
           {ideathonData.scene10.title}
         </motion.h1>
