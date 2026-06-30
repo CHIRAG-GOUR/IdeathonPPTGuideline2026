@@ -1,0 +1,105 @@
+"use client";
+
+import { motion } from "framer-motion";
+import SceneWrapper from "../SceneWrapper";
+import { ideathonData } from "@/content/ideathon-data";
+import Image from "next/image";
+
+export default function Scene6() {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.3 }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, x: -50 },
+    show: { opacity: 1, x: 0, transition: { type: "spring" as const, bounce: 0.3 } }
+  };
+
+  const weekColors = [
+    "border-l-yellow-500",
+    "border-l-gray-400",
+    "border-l-orange-500"
+  ];
+
+  return (
+    <SceneWrapper>
+      <div className="w-full flex flex-col md:flex-row gap-8 items-center justify-between p-4 md:p-8 max-w-6xl mx-auto h-full">
+        
+        {/* Left Side */}
+        <div className="flex-1 w-full text-left">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 relative inline-block"
+          >
+            <h2 className="relative z-10 text-4xl md:text-6xl font-black text-gray-800 uppercase tracking-widest drop-shadow-sm border-l-8 border-yellow-500 pl-4">
+              {ideathonData.scene6.title}
+            </h2>
+          </motion.div>
+
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col gap-6"
+          >
+            {ideathonData.scene6.weeks.map((week, i) => (
+              <motion.div 
+                key={i} 
+                variants={item} 
+                className={`glass-warm rounded-2xl shadow-md border-l-8 ${weekColors[i]} p-6 flex flex-col md:flex-row gap-4 md:items-center relative overflow-hidden hover:scale-[1.02] transition-transform`}
+              >
+                <div className="w-24 shrink-0 flex flex-col items-center md:items-start md:border-r-2 md:border-gray-200/50 md:pr-4 relative z-10">
+                  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{week.week}</span>
+                  <span className="text-xl font-black text-gray-800 leading-tight">{week.name}</span>
+                </div>
+                
+                <div className="flex-1 relative z-10">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {week.tasks.map((task, j) => (
+                      <li key={j} className="flex items-start gap-2 text-sm font-bold text-gray-600">
+                        <span className="text-yellow-500 mt-0.5">▶</span>
+                        {task}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Right Side: Winner Banner replaced with Image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, x: 50 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ delay: 0.8, type: "spring" as const, bounce: 0.6 }}
+          className="w-full md:w-1/3 flex flex-col justify-center items-center mt-8 md:mt-0 gap-6"
+        >
+          <div className="w-full max-w-sm aspect-square rounded-[3rem] overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold relative">
+            <Image 
+              src="/media/scene6.png" 
+              alt="Glowing futuristic calendar" 
+              fill 
+              className="object-cover"
+            />
+          </div>
+          
+          <div className="glass-warm px-6 py-4 rounded-2xl text-center border border-yellow-400/30 w-full glow-gold">
+            <h3 className="text-2xl font-black text-gray-800 uppercase leading-tight">
+              {ideathonData.scene6.winnersInfo.split(":")[0]}
+            </h3>
+            <p className="text-lg font-bold text-yellow-700 mt-1">
+              {ideathonData.scene6.winnersInfo.split(":")[1]}
+            </p>
+          </div>
+        </motion.div>
+
+      </div>
+    </SceneWrapper>
+  );
+}

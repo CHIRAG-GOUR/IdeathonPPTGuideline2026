@@ -1,65 +1,179 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import AnimatedBackground from "@/components/AnimatedBackground";
+import Scene1 from "@/components/scenes/Scene1";
+import Scene2 from "@/components/scenes/Scene2";
+import Scene3 from "@/components/scenes/Scene3";
+import Scene4 from "@/components/scenes/Scene4";
+import Scene5 from "@/components/scenes/Scene5";
+import Scene6 from "@/components/scenes/Scene6";
+import Scene7 from "@/components/scenes/Scene7";
+import Scene8 from "@/components/scenes/Scene8";
+import Scene9 from "@/components/scenes/Scene9";
+import Scene10 from "@/components/scenes/Scene10";
+
+const TOTAL_SCENES = 10;
+
+export default function Presentation() {
+  const [hasStarted, setHasStarted] = useState(false);
+  const [activeScene, setActiveScene] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const isScrolling = useRef(false);
+
+  const handleStart = () => {
+    setHasStarted(true);
+  };
+
+  const nextAction = useCallback(() => {
+    if (activeScene < TOTAL_SCENES - 1) {
+      setActiveScene((prev) => prev + 1);
+    }
+  }, [activeScene]);
+
+  const prevAction = useCallback(() => {
+    if (activeScene > 0) {
+      setActiveScene((prev) => prev - 1);
+    }
+  }, [activeScene]);
+
+  // Handle Wheel Events
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrolling.current) return;
+
+      isScrolling.current = true;
+      if (e.deltaY > 50) {
+        nextAction();
+      } else if (e.deltaY < -50) {
+        prevAction();
+      }
+
+      setTimeout(() => {
+        isScrolling.current = false;
+      }, 800);
+    };
+
+    window.addEventListener("wheel", handleWheel);
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [nextAction, prevAction]);
+
+  // Handle Keyboard Navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
+        nextAction();
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+        prevAction();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nextAction, prevAction]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => console.log(err));
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
+  const renderScene = () => {
+    switch (activeScene) {
+      case 0: return <Scene1 key="scene1" />;
+      case 1: return <Scene2 key="scene2" />;
+      case 2: return <Scene3 key="scene3" />;
+      case 3: return <Scene4 key="scene4" />;
+      case 4: return <Scene5 key="scene5" />;
+      case 5: return <Scene6 key="scene6" />;
+      case 6: return <Scene7 key="scene7" />;
+      case 7: return <Scene8 key="scene8" />;
+      case 8: return <Scene9 key="scene9" />;
+      case 9: return <Scene10 key="scene10" />;
+      default: return null;
+    }
+  };
+
+  if (!hasStarted) {
+    return (
+      <main
+        className="relative w-full h-screen flex items-center justify-center cursor-pointer overflow-hidden"
+        onClick={handleStart}
+      >
+        {/* Flowing background visible on start screen */}
+        <AnimatedBackground />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative z-10 flex flex-col items-center text-center px-6"
+        >
+          {/* Trophy icon */}
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+            className="text-6xl md:text-8xl mb-8 drop-shadow-lg"
+          >
+            🏆
+          </motion.div>
+
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight gold-shimmer-text mb-4 leading-tight">
+            SkilliZee Ideathon 2026
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <h2 className="text-xl md:text-3xl font-bold uppercase tracking-[0.15em] silver-shimmer-text mb-10">
+            PPT Guidelines
+          </h2>
+
+          <div className="glass-warm px-8 py-4 rounded-full glow-gold">
+            <span className="text-sm md:text-base text-gray-600 uppercase tracking-[0.2em] font-bold animate-pulse">
+              Click anywhere to begin
+            </span>
+          </div>
+        </motion.div>
       </main>
-    </div>
+    );
+  }
+
+  return (
+    <main className="relative w-full h-screen overflow-hidden font-sans">
+      {/* Animated flowing background behind everything */}
+      <AnimatedBackground />
+
+      {/* Scene content */}
+      <div className="relative z-10 w-full h-full">
+        <AnimatePresence mode="wait">
+          {renderScene()}
+        </AnimatePresence>
+      </div>
+
+      {/* Navigation Indicators – glass pill */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-2 glass-warm px-4 py-2 rounded-full">
+        {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setActiveScene(idx)}
+            className={`h-3 rounded-full transition-all duration-300 ${
+              idx === activeScene
+                ? "bg-gradient-to-r from-yellow-400 to-yellow-600 w-8 glow-gold"
+                : "bg-gray-300/60 w-3 hover:bg-yellow-300/60"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Fullscreen Toggle */}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute top-6 right-6 z-50 p-3 glass-warm hover:glow-gold text-gray-600 hover:text-yellow-600 rounded-full transition-all duration-300"
+      >
+        <span className="text-xl leading-none">{isFullscreen ? "🗗" : "⛶"}</span>
+      </button>
+    </main>
   );
 }
