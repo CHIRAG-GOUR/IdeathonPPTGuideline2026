@@ -79,12 +79,12 @@ export default function Scene2() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.0, duration: 1.2, ease: "easeOut" }}
-          className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold relative z-10"
+          className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold relative z-10 mx-auto"
         >
-          <div className="relative w-[300px] h-[180px] md:w-[700px] md:h-[300px]">
+          <div className="relative w-[280px] h-[280px] md:w-[360px] md:h-[360px]">
             <Image 
-              src="/media/scene2.png" 
-              alt="Glowing futuristic roadmap" 
+              src="/media/scene2_indian_students.png" 
+              alt="Indian school students brainstorming" 
               fill 
               className="object-cover"
             />

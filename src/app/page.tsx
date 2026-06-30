@@ -153,15 +153,15 @@ export default function Presentation() {
       </div>
 
       {/* Navigation Indicators – glass pill */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-2 glass-warm px-4 py-2 rounded-full">
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 glass-warm px-2 py-4 rounded-full">
         {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
           <button
             key={idx}
             onClick={() => setActiveScene(idx)}
-            className={`h-3 rounded-full transition-all duration-300 ${
+            className={`w-3 rounded-full transition-all duration-300 ${
               idx === activeScene
-                ? "bg-gradient-to-r from-yellow-400 to-yellow-600 w-8 glow-gold"
-                : "bg-gray-300/60 w-3 hover:bg-yellow-300/60"
+                ? "bg-gradient-to-b from-yellow-400 to-yellow-600 h-8 glow-gold"
+                : "bg-gray-300/60 h-3 hover:bg-yellow-300/60"
             }`}
           />
         ))}

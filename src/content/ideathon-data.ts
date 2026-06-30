@@ -48,9 +48,19 @@ export const ideathonData = {
     title: "Your Secret Superpowers",
     subtitle: "Smart Innovators Use Smart Tools (AI Tools)",
     tools: {
-      ppt: ["Gamma.app", "https://chroniclehq.com/", "https://slidesgo.com/"],
-      website: ["https://lovable.dev/", "https://app.emergent.sh/landing/"],
-      app: ["Claude AI", "Codex AI"]
+      ppt: [
+        { name: "Gamma.app", url: "gamma.app" },
+        { name: "Chronicle", url: "chroniclehq.com" },
+        { name: "Slidesgo", url: "slidesgo.com" }
+      ],
+      website: [
+        { name: "Lovable.dev", url: "lovable.dev" },
+        { name: "Emergent", url: "app.emergent.sh" }
+      ],
+      app: [
+        { name: "Claude AI", url: "claude.ai" },
+        { name: "Codex AI", url: "openai.com" }
+      ]
     },
     mentorScript: "AI doesn't replace your creativity.\nIt multiplies it."
   },

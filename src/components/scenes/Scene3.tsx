@@ -84,11 +84,10 @@ export default function Scene3() {
         >
           <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold w-full max-w-lg">
             <div className="relative w-full aspect-square">
-              <Image 
-                src="/media/scene3.png" 
-                alt="Students brainstorming" 
-                fill 
-                className="object-cover"
+              <img 
+                src="/media/Thinking Crop.gif" 
+                alt="Students brainstorming and thinking" 
+                className="w-full h-full object-cover mix-blend-multiply"
               />
             </div>
           </div>

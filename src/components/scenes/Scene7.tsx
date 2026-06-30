@@ -60,6 +60,16 @@ export default function Scene7() {
                 )}
               </motion.div>
             ))}
+
+            {/* Bonus */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="w-full mt-auto bg-gradient-to-r from-yellow-300 to-yellow-500 px-4 py-8 min-h-[140px] rounded-2xl shadow-md border-2 border-yellow-200 flex items-center justify-center text-center glow-gold"
+            >
+              <span className="text-base font-black text-white uppercase tracking-wider drop-shadow-sm leading-tight">{ideathonData.scene7.bonus}</span>
+            </motion.div>
           </motion.div>
 
           {/* Presentation Includes & Image */}
@@ -98,16 +108,6 @@ export default function Scene7() {
             </motion.div>
           </div>
         </div>
-
-        {/* Bonus */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="w-full max-w-3xl mt-6 bg-gradient-to-r from-yellow-300 to-yellow-500 p-4 rounded-2xl shadow-md border-2 border-yellow-200 flex items-center justify-center text-center glow-gold"
-        >
-          <span className="text-xl font-black text-white uppercase tracking-wider drop-shadow-sm">{ideathonData.scene7.bonus}</span>
-        </motion.div>
 
       </div>
     </SceneWrapper>

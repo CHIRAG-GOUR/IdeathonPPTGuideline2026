@@ -50,8 +50,9 @@ export default function Scene5() {
               <h4 className="text-lg font-black text-yellow-700 uppercase tracking-wider mb-2 border-b-2 border-yellow-200 pb-1">PPT AI</h4>
               <ul className="flex flex-col gap-2">
                 {ideathonData.scene5.tools.ppt.map((tool, i) => (
-                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-yellow-100/50">
-                    {tool}
+                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-yellow-100/50 flex items-center gap-3">
+                    <img src={`https://s2.googleusercontent.com/s2/favicons?domain=${tool.url}&sz=64`} alt={tool.name} className="w-6 h-6 rounded-md bg-white p-0.5 shadow-sm" />
+                    <span>{tool.name}</span>
                   </li>
                 ))}
               </ul>
@@ -63,8 +64,9 @@ export default function Scene5() {
               <h4 className="text-lg font-black text-gray-600 uppercase tracking-wider mb-2 border-b-2 border-gray-200 pb-1">Web AI</h4>
               <ul className="flex flex-col gap-2">
                 {ideathonData.scene5.tools.website.map((tool, i) => (
-                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-gray-100/50">
-                    {tool}
+                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-gray-100/50 flex items-center gap-3">
+                    <img src={`https://s2.googleusercontent.com/s2/favicons?domain=${tool.url}&sz=64`} alt={tool.name} className="w-6 h-6 rounded-md bg-white p-0.5 shadow-sm" />
+                    <span>{tool.name}</span>
                   </li>
                 ))}
               </ul>
@@ -76,8 +78,9 @@ export default function Scene5() {
               <h4 className="text-lg font-black text-orange-700 uppercase tracking-wider mb-2 border-b-2 border-orange-200 pb-1">App AI</h4>
               <ul className="flex flex-col gap-2">
                 {ideathonData.scene5.tools.app.map((tool, i) => (
-                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-orange-100/50">
-                    {tool}
+                  <li key={i} className="glass-warm p-2 rounded-xl text-sm font-bold text-gray-700 break-words border border-orange-100/50 flex items-center gap-3">
+                    <img src={`https://s2.googleusercontent.com/s2/favicons?domain=${tool.url}&sz=64`} alt={tool.name} className="w-6 h-6 rounded-md bg-white p-0.5 shadow-sm" />
+                    <span>{tool.name}</span>
                   </li>
                 ))}
               </ul>

@@ -9,13 +9,27 @@ export default function Scene9() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.2 }
+      transition: { 
+        staggerChildren: 0.25,
+        delayChildren: 0.5 
+      }
     }
   };
 
   const item = {
-    hidden: { opacity: 0, x: -50, filter: "blur(5px)" },
-    show: { opacity: 1, x: 0, filter: "blur(0px)", transition: { type: "spring" as const, bounce: 0.4 } }
+    hidden: { opacity: 0, x: 50, scale: 0.9, filter: "blur(8px)" },
+    show: { 
+      opacity: 1, 
+      x: 0, 
+      scale: 1, 
+      filter: "blur(0px)", 
+      transition: { type: "spring" as const, stiffness: 100, damping: 15, mass: 0.8 } 
+    }
+  };
+
+  const dotVariant = {
+    hidden: { scale: 0, opacity: 0 },
+    show: { scale: 1, opacity: 1, transition: { type: "spring" as const, bounce: 0.6 } }
   };
 
   return (
@@ -45,30 +59,34 @@ export default function Scene9() {
           animate="show"
           className="w-full flex flex-col gap-4 relative"
         >
-          {/* Vertical timeline line */}
-          <div className="hidden md:block absolute left-24 top-4 bottom-4 w-1 bg-gradient-to-b from-yellow-300 via-gray-300 to-orange-300 z-0 rounded-full"></div>
+          {/* Vertical timeline line - animates drawing down */}
+          <div className="hidden md:block absolute left-24 top-4 bottom-4 w-1 bg-gray-200/30 z-0 rounded-full overflow-hidden">
+            <motion.div 
+              initial={{ height: 0 }}
+              animate={{ height: "100%" }}
+              transition={{ duration: 2, ease: "easeInOut", delay: 0.2 }}
+              className="w-full bg-gradient-to-b from-yellow-300 via-yellow-500 to-orange-500 rounded-full"
+            />
+          </div>
 
           {ideathonData.scene9.dates.map((date, i) => (
             <motion.div 
               key={i} 
               variants={item} 
-              className="flex flex-col md:flex-row items-start md:items-center gap-4 relative z-10 w-full"
+              className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10 w-full group"
             >
               {/* Week indicator */}
-              <div className="w-20 md:w-48 shrink-0 flex justify-end">
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white font-bold px-4 py-2 rounded-xl shadow-md w-full text-center md:text-right border border-yellow-500/30">
+              <div className="w-20 md:w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-2">
+                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white font-black px-6 py-3 rounded-2xl shadow-lg w-full text-center md:text-right border border-yellow-500/40 glow-silver group-hover:glow-gold transition-all duration-300">
                   {date.week}
                 </div>
               </div>
-              
-              {/* Timeline dot */}
-              <div className="hidden md:flex w-8 h-8 rounded-full glass-warm border-4 border-yellow-400 items-center justify-center shadow-sm shrink-0 z-10 glow-gold">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-              </div>
+              {/* Removed Timeline dot as per request */}
 
               {/* Event card */}
-              <div className="flex-1 glass-warm p-4 rounded-xl border-l-4 border-yellow-400 w-full hover:glow-gold transition-all duration-300">
-                <span className="text-lg font-bold text-gray-700">{date.event}</span>
+              <div className="flex-1 glass-warm p-5 rounded-2xl border-l-8 border-yellow-400 w-full shadow-md group-hover:shadow-2xl group-hover:border-orange-500 group-hover:translate-x-2 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-200/0 via-yellow-200/20 to-yellow-200/0 -translate-x-full group-hover:animate-[shine_1s_ease-in-out]"></div>
+                <span className="text-xl font-bold text-gray-800 tracking-wide">{date.event}</span>
               </div>
             </motion.div>
           ))}

@@ -53,7 +53,7 @@ export default function Scene6() {
                 variants={item} 
                 className={`glass-warm rounded-2xl shadow-md border-l-8 ${weekColors[i]} p-6 flex flex-col md:flex-row gap-4 md:items-center relative overflow-hidden hover:scale-[1.02] transition-transform`}
               >
-                <div className="w-24 shrink-0 flex flex-col items-center md:items-start md:border-r-2 md:border-gray-200/50 md:pr-4 relative z-10">
+                <div className="min-w-[150px] shrink-0 flex flex-col items-center md:items-start md:border-r-2 md:border-gray-200/50 md:pr-4 relative z-10">
                   <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{week.week}</span>
                   <span className="text-xl font-black text-gray-800 leading-tight">{week.name}</span>
                 </div>
@@ -82,8 +82,8 @@ export default function Scene6() {
         >
           <div className="w-full max-w-sm aspect-square rounded-[3rem] overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold relative">
             <Image 
-              src="/media/scene6.png" 
-              alt="Glowing futuristic calendar" 
+              src="/media/scene6_class_competition.png" 
+              alt="Indian students presenting in a classroom competition" 
               fill 
               className="object-cover"
             />

@@ -49,13 +49,21 @@ export default function Scene4() {
             <motion.div 
               key={i} 
               variants={item} 
-              className="flex flex-col items-center glass-warm p-4 rounded-2xl relative z-10 hover:glow-gold transition-all duration-300 hover:-translate-y-2"
+              className="flex flex-col items-center glass-warm p-4 pt-8 mt-6 rounded-2xl relative z-10 hover:glow-gold transition-all duration-300 hover:-translate-y-2 h-full"
             >
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 text-white font-black flex items-center justify-center text-xl shadow-md mb-4 border-2 border-white glow-gold">
+              <div className="absolute -top-6 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 text-white font-black flex items-center justify-center text-xl shadow-md border-2 border-white glow-gold z-20">
                 {i + 1}
               </div>
+              <div className="relative w-full aspect-square md:aspect-[4/5] rounded-xl overflow-hidden mb-4 border-2 border-yellow-200/50 shadow-inner">
+                <Image 
+                  src={`/media/scene4_step${i + 1}.png`}
+                  alt={step.name}
+                  fill
+                  className="object-cover hover:scale-110 transition-transform duration-700"
+                />
+              </div>
               <h3 className="text-sm text-gray-500 font-bold uppercase mb-1">{step.step}</h3>
-              <h4 className="text-lg font-bold text-gray-800 text-center leading-tight mb-2">
+              <h4 className="text-lg font-bold text-gray-800 text-center leading-tight mb-3">
                 {step.name}
               </h4>
               {step.desc && (
@@ -65,21 +73,6 @@ export default function Scene4() {
               )}
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Hyper realistic image replacing mentor script */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-          className="mt-2 rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold relative w-full max-w-3xl flex items-center justify-center h-48 md:h-64"
-        >
-          <Image 
-            src="/media/scene4.png" 
-            alt="Glowing floating steps" 
-            fill 
-            className="object-cover"
-          />
         </motion.div>
 
       </div>
