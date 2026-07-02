@@ -70,7 +70,7 @@ function Confetti() {
   );
 }
 
-function ProceduralTrophy() {
+export function ProceduralTrophy() {
   const groupRef = useRef<THREE.Group>(null);
   const material = new THREE.MeshStandardMaterial({
     color: '#FACC15', // Brilliant gold

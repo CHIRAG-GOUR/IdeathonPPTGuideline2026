@@ -55,12 +55,21 @@ export default function Scene2() {
               <div className={`w-full p-6 rounded-3xl shadow-lg border-2 bg-gradient-to-br flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:shadow-xl relative z-10 glass-warm ${levelStyles[i]}`}>
                 <span className="text-4xl mb-2">{levelIcons[i]}</span>
                 <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2">{lvl.level}</span>
-                <span className="text-xl md:text-2xl font-black text-gray-800 leading-tight">{lvl.name}</span>
+                <span className="text-xl md:text-2xl font-black text-gray-800 leading-tight mb-4">{lvl.name}</span>
+                
+                <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-inner mt-2 border-2 border-white/50 bg-gray-200">
+                  <Image 
+                    src={`/media/scene2_level${i + 1}.png`} 
+                    alt={lvl.name} 
+                    fill 
+                    className="object-cover hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
               </div>
               
               {/* Desktop connector */}
               {i < ideathonData.scene2.levels.length - 1 && (
-                <div className="hidden md:flex absolute top-1/2 -right-8 w-12 h-1 bg-gradient-to-r from-blue-300 to-blue-500 z-0">
+                <div className="hidden md:flex absolute top-1/3 -right-8 w-12 h-1 bg-gradient-to-r from-blue-300 to-blue-500 z-0">
                   <div className="absolute right-0 top-1/2 -translate-y-1/2 border-t-[8px] border-t-transparent border-l-[12px] border-l-blue-500 border-b-[8px] border-b-transparent translate-x-full"></div>
                 </div>
               )}
@@ -72,23 +81,6 @@ export default function Scene2() {
               )}
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Hyper realistic roadmap image */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.0, duration: 1.2, ease: "easeOut" }}
-          className="rounded-3xl overflow-hidden shadow-2xl border-4 border-blue-200/50 glow-blue relative z-10 mx-auto"
-        >
-          <div className="relative w-[280px] h-[280px] md:w-[360px] md:h-[360px]">
-            <Image 
-              src="/media/scene2_indian_students.png" 
-              alt="Indian school students brainstorming" 
-              fill 
-              className="object-cover"
-            />
-          </div>
         </motion.div>
 
       </div>

@@ -67,7 +67,7 @@ export default function Scene4() {
                 {step.name}
               </h4>
               {step.desc && (
-                <p className="text-xs font-semibold text-gray-600 text-center bg-blue-50/50 p-2 rounded-lg w-full whitespace-pre-line mt-auto border border-blue-200/50">
+                <p className="text-sm font-bold text-blue-800 text-center bg-blue-100/60 p-3 rounded-xl w-full whitespace-pre-line mt-auto border border-blue-300 shadow-sm">
                   {step.desc}
                 </p>
               )}

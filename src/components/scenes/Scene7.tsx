@@ -90,7 +90,7 @@ export default function Scene7() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="w-full max-w-4xl h-48 md:h-64 lg:h-[320px] rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-300/50 relative mt-2"
+            className="w-full max-w-4xl h-48 md:h-64 lg:h-[320px] rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-300/50 relative mt-2 mx-auto"
           >
             <Image 
               src="/scene7_student.png" 

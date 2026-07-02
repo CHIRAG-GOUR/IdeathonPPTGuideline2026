@@ -39,7 +39,7 @@ export const ideathonData = {
       { step: "Step 1", name: "Understand the Problem" },
       { step: "Step 2", name: "Brainstorm Ideas" },
       { step: "Step 3", name: "Choose the Best Solution" },
-      { step: "Step 4", name: "Create Your Prototype", desc: "Paper Prototype OR Working Model" },
+      { step: "Step 4", name: "Create Your Prototype", desc: "Prototype OR Working Model" },
       { step: "Step 5", name: "Prepare Your Pitch", desc: "2–3 Minutes\nExplain: Problem, Solution, Impact" }
     ],
     mentorScript: "Don't wait for the perfect idea.\nBuild.\nTest.\nImprove."
@@ -71,7 +71,7 @@ export const ideathonData = {
       { week: "Week 2", date: "April 12 - April 18", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
       { week: "Week 3", date: "April 19 - April 25", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
     ],
-    winnersInfo: "Winners Selected: 2 Teams per Class"
+    winnersInfo: "Winners Selected: 1 Team per Class"
   },
   scene7: {
     title: "Welcome to Level 2",
@@ -87,32 +87,28 @@ export const ideathonData = {
     desc: "Students from different schools compete together.",
     experience: [
       "Innovation Masterclass",
-      "Startup Founder Sessions",
       "Prototype Refinement",
       "Networking",
       "Professional Jury Pitch",
-      "Prize Ceremony",
-      "Founder Pep Talk"
+      "Prize Ceremony"
     ],
     rewards: [
       { icon: "🥇", text: "Cash Prize" },
       { icon: "🏆", text: "Rolling Trophy" },
       { icon: "📜", text: "Certificates" },
-      { icon: "🥈", text: "Internship Opportunities" },
-      { icon: "🌟", text: "Special Recognition Awards" }
+      { icon: "💻", text: "Electronic Device" }
     ],
     mentorScript: "Imagine presenting your idea in front of startup founders.\nThat's where your journey could lead."
   },
   scene9: {
     title: "Important Dates",
     dates: [
-      { week: "Week 1", event: "Launch | Problem Reveal | Team Formation" },
-      { week: "Week 2", event: "Mentoring | Prototype Building" },
-      { week: "Week 3", event: "Class Presentations | Level 1 Winners" },
-      { week: "Week 4", event: "Inter-Class Competition" },
-      { week: "Week 5", event: "Grand Finale @ CCWS" }
+      { week: "July 29", event: "Ideathon Round 1 – Class Level Begins" },
+      { week: "July 31", event: "Team & Genre Submission along with Masterclass" },
+      { week: "Aug 29", event: "LEVEL-1 : Finalize Idea + Prototype + Class Presentations" },
+      { week: "TBA", event: "GRAND FINALE – But only if u win Level 1 & 2" }
     ],
-    disclaimer: "(Replace these placeholders with the official academic calendar dates once finalized.)"
+    disclaimer: "(These dates are final for the 2026 Ideathon.)"
   },
   scene10: {
     title: "Are You Ready?",
