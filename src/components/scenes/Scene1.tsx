@@ -72,7 +72,7 @@ export default function Scene1() {
         >
           <div className="relative w-72 h-48 md:w-[600px] md:h-[350px]">
             <Image 
-              src="/media/scene1_v2.png" 
+              src="/media/scene1_v3.png" 
               alt="Ideathon Championship Podium" 
               fill 
               className="object-cover"
