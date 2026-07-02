@@ -44,11 +44,11 @@ export default function Scene9() {
           <motion.div 
             animate={{ y: [0, -6, 0] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-            className="inline-block p-4 glass-warm rounded-full glow-silver mb-4"
+            className="inline-block p-4 glass-warm rounded-full glow-blue mb-4 border border-blue-200"
           >
             <span className="text-4xl">📅</span>
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black silver-shimmer-text uppercase tracking-widest drop-shadow-sm">
+          <h2 className="text-4xl md:text-6xl font-black text-blue-700 uppercase tracking-widest drop-shadow-sm">
             {ideathonData.scene9.title}
           </h2>
         </motion.div>
@@ -65,7 +65,7 @@ export default function Scene9() {
               initial={{ height: 0 }}
               animate={{ height: "100%" }}
               transition={{ duration: 2, ease: "easeInOut", delay: 0.2 }}
-              className="w-full bg-gradient-to-b from-yellow-300 via-yellow-500 to-orange-500 rounded-full"
+              className="w-full bg-gradient-to-b from-blue-300 via-blue-500 to-blue-700 rounded-full"
             />
           </div>
 
@@ -77,15 +77,15 @@ export default function Scene9() {
             >
               {/* Week indicator */}
               <div className="w-20 md:w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-2">
-                <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white font-black px-6 py-3 rounded-2xl shadow-lg w-full text-center md:text-right border border-yellow-500/40 glow-silver group-hover:glow-gold transition-all duration-300">
+                <div className="bg-gradient-to-r from-blue-800 to-blue-900 text-white font-black px-6 py-3 rounded-2xl shadow-lg w-full text-center md:text-right border border-blue-500/40 glow-blue group-hover:shadow-blue-500/50 transition-all duration-300">
                   {date.week}
                 </div>
               </div>
               {/* Removed Timeline dot as per request */}
 
               {/* Event card */}
-              <div className="flex-1 glass-warm p-5 rounded-2xl border-l-8 border-yellow-400 w-full shadow-md group-hover:shadow-2xl group-hover:border-orange-500 group-hover:translate-x-2 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-200/0 via-yellow-200/20 to-yellow-200/0 -translate-x-full group-hover:animate-[shine_1s_ease-in-out]"></div>
+              <div className="flex-1 bg-white/90 backdrop-blur-sm p-5 rounded-2xl border-l-8 border-blue-400 w-full shadow-md group-hover:shadow-2xl group-hover:border-blue-600 group-hover:translate-x-2 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-200/0 via-blue-200/20 to-blue-200/0 -translate-x-full group-hover:animate-[shine_1s_ease-in-out]"></div>
                 <span className="text-xl font-bold text-gray-800 tracking-wide">{date.event}</span>
               </div>
             </motion.div>
@@ -96,7 +96,7 @@ export default function Scene9() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="mt-12 text-sm font-bold text-gray-400 italic text-center max-w-xl glass-warm px-6 py-3 rounded-xl"
+          className="mt-12 text-sm font-bold text-blue-800 italic text-center max-w-xl bg-blue-50/80 border border-blue-100 px-6 py-3 rounded-xl backdrop-blur-sm"
         >
           {ideathonData.scene9.disclaimer}
         </motion.div>

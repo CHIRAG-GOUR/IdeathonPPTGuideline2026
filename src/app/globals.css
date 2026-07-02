@@ -97,15 +97,15 @@ body {
   animation: goldShimmer 4.5s linear infinite;
 }
 
-/* ── Glass card with warm tint ── */
+/* ── Glass card with warm tint (Updated to SkilliZee blue tint) ── */
 .glass-warm {
-  background: rgba(255, 253, 247, 0.65);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(218, 165, 32, 0.15);
+  border: 1px solid rgba(30, 99, 208, 0.15); /* SkilliZee blue */
   box-shadow:
-    0 8px 32px rgba(218, 165, 32, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 8px 32px rgba(30, 99, 208, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 /* ── Medal glow rings ── */
@@ -117,4 +117,7 @@ body {
 }
 .glow-bronze {
   box-shadow: 0 0 20px rgba(205, 127, 50, 0.35), 0 0 60px rgba(205, 127, 50, 0.1);
+}
+.glow-blue {
+  box-shadow: 0 0 20px rgba(30, 99, 208, 0.35), 0 0 60px rgba(30, 99, 208, 0.15);
 }

@@ -11,10 +11,9 @@ import Scene5 from "@/components/scenes/Scene5";
 import Scene6 from "@/components/scenes/Scene6";
 import Scene7 from "@/components/scenes/Scene7";
 import Scene8 from "@/components/scenes/Scene8";
-import Scene9 from "@/components/scenes/Scene9";
 import Scene10 from "@/components/scenes/Scene10";
 
-const TOTAL_SCENES = 10;
+const TOTAL_SCENES = 9;
 
 export default function Presentation() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -93,8 +92,7 @@ export default function Presentation() {
       case 5: return <Scene6 key="scene6" />;
       case 6: return <Scene7 key="scene7" />;
       case 7: return <Scene8 key="scene8" />;
-      case 8: return <Scene9 key="scene9" />;
-      case 9: return <Scene10 key="scene10" />;
+      case 8: return <Scene10 key="scene10" />;
       default: return null;
     }
   };
@@ -123,7 +121,7 @@ export default function Presentation() {
             🏆
           </motion.div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight gold-shimmer-text mb-4 leading-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight gold-shimmer-text mb-4 leading-tight" style={{ WebkitTextStroke: '2px #111111' }}>
             SkilliZee Ideathon 2026
           </h1>
           <h2 className="text-xl md:text-3xl font-bold uppercase tracking-[0.15em] silver-shimmer-text mb-10">

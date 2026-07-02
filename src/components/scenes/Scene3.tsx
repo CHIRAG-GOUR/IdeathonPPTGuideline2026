@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
-import Image from "next/image";
 
 export default function Scene3() {
   const container = {
@@ -34,7 +33,7 @@ export default function Scene3() {
             <h2 className="text-3xl md:text-5xl font-black text-gray-800 uppercase tracking-wider">
               {ideathonData.scene3.title}
             </h2>
-            <h3 className="text-xl md:text-2xl font-bold gold-shimmer-text uppercase tracking-widest mt-2">
+            <h3 className="text-xl md:text-2xl font-bold text-blue-600 uppercase tracking-widest mt-2">
               {ideathonData.scene3.subtitle}
             </h3>
           </motion.div>
@@ -50,9 +49,9 @@ export default function Scene3() {
               <motion.div 
                 key={i} 
                 variants={item} 
-                className="flex items-center gap-4 glass-warm p-4 rounded-xl"
+                className="flex items-center gap-4 bg-white/90 backdrop-blur-sm border border-blue-200/50 p-4 rounded-xl shadow-sm"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 flex items-center justify-center shrink-0 glow-gold">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shrink-0 shadow-md">
                   <span className="text-white font-bold text-sm">✓</span>
                 </div>
                 <div className="text-lg md:text-xl font-semibold text-gray-800">
@@ -66,9 +65,9 @@ export default function Scene3() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.5, duration: 1 }}
-            className="mt-8 p-6 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl text-white shadow-xl border border-yellow-500/30"
+            className="mt-8 p-6 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl text-white shadow-xl border border-blue-500/30"
           >
-            <p className="text-sm uppercase tracking-widest text-yellow-400 font-bold mb-2">Remember</p>
+            <p className="text-sm uppercase tracking-widest text-blue-400 font-bold mb-2">Remember</p>
             <p className="text-lg font-bold leading-relaxed whitespace-pre-line">
               {ideathonData.scene3.remember}
             </p>
@@ -82,7 +81,7 @@ export default function Scene3() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex-1 w-full flex justify-center items-center mt-8 md:mt-0"
         >
-          <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-200/50 glow-gold w-full max-w-lg">
+          <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-blue-200/50 relative glow-blue w-full max-w-lg">
             <div className="relative w-full aspect-square">
               <img 
                 src="/media/Thinking Crop.gif" 

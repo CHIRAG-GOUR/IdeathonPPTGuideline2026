@@ -29,7 +29,7 @@ export default function Scene10() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, type: "spring" as const, bounce: 0.5 }}
-          className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-8 border-yellow-400 glow-gold"
+          className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-8 border-blue-400 glow-blue"
         >
           <Image 
             src="/media/scene10.png" 
@@ -60,7 +60,7 @@ export default function Scene10() {
             <motion.div 
               key={i} 
               variants={wordItem} 
-              className="px-6 py-3 glass-warm rounded-2xl glow-gold flex items-center justify-center transform hover:scale-110 transition-transform duration-300"
+              className="px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 flex items-center justify-center transform hover:scale-110 transition-transform duration-300"
             >
               <span className="text-xl md:text-3xl font-black text-gray-800 uppercase tracking-wider">{phrase}</span>
             </motion.div>
@@ -72,9 +72,9 @@ export default function Scene10() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="max-w-3xl mt-2 p-6 rounded-3xl bg-gray-900 shadow-2xl relative text-center border border-yellow-500/30 glow-gold"
+          className="max-w-3xl mt-2 p-6 rounded-3xl bg-gray-900 shadow-2xl relative text-center border border-blue-500/30 glow-blue"
         >
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-6 py-1 rounded-full font-bold text-sm tracking-widest uppercase shadow-md">
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-1 rounded-full font-bold text-sm tracking-widest uppercase shadow-md">
             Remember
           </div>
           <p className="text-lg md:text-xl text-white font-bold leading-relaxed whitespace-pre-line">

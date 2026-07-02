@@ -48,7 +48,7 @@ export default function Scene1() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 1.5, ease: "easeOut" }}
-          className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter gold-shimmer-text drop-shadow-sm text-center"
+          className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-blue-600 drop-shadow-sm text-center"
         >
           {ideathonData.scene1.title}
         </motion.h1>
@@ -68,7 +68,7 @@ export default function Scene1() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.5, duration: 1.2, type: "spring", bounce: 0.4 }}
-          className="mt-6 rounded-3xl overflow-hidden shadow-2xl glow-gold border-4 border-yellow-200/50"
+          className="mt-6 rounded-3xl overflow-hidden shadow-2xl glow-blue border-4 border-blue-200/50"
         >
           <div className="relative w-72 h-48 md:w-[600px] md:h-[350px]">
             <Image 

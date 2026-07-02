@@ -1,10 +1,10 @@
 export const ideathonData = {
   global: {
     eventName: "SkilliZee Ideathon 2026",
-    primaryColor: "#FFD700", // Gold
-    secondaryColor: "#C0C0C0", // Silver
-    accentBronze: "#CD7F32", // Bronze
-    lightBackground: "#FAFAFA"
+    primaryColor: "#1E63D0", // SkilliZee Blue
+    secondaryColor: "#e2e8f0", // Light gray/blue
+    accentBronze: "#3b82f6", // Lighter blue accent
+    lightBackground: "#f8fafc"
   },
   scene1: {
     title: "SkilliZee Ideathon 2026",
@@ -16,7 +16,7 @@ export const ideathonData = {
     levels: [
       { level: "Level 1", name: "In-Class Competition" },
       { level: "Level 2", name: "Inter-Class Competition" },
-      { level: "Level 3", name: "Interschool Grand Finale @ CCIS" }
+      { level: "Level 3", name: "Interschool Grand Finale @ CCWS" }
     ],
     mentorScript: "Every successful startup begins with one small step.\nToday you begin in your classroom.\nTomorrow you could be pitching in front of founders, industry experts, and students from other schools."
   },
@@ -49,17 +49,17 @@ export const ideathonData = {
     subtitle: "Smart Innovators Use Smart Tools (AI Tools)",
     tools: {
       ppt: [
-        { name: "Gamma.app", url: "gamma.app" },
-        { name: "Chronicle", url: "chroniclehq.com" },
-        { name: "Slidesgo", url: "slidesgo.com" }
+        { name: "Gamma.app", url: "gamma.app", yt: "https://www.youtube.com/embed/h5QZ9Sh2S0M" },
+        { name: "Chronicle", url: "chroniclehq.com", yt: "https://www.youtube.com/embed/tEzCvRBWYeU" },
+        { name: "Slidesgo", url: "slidesgo.com", yt: "https://www.youtube.com/embed/jdeXn8i_Pko" }
       ],
       website: [
-        { name: "Lovable.dev", url: "lovable.dev" },
-        { name: "Emergent", url: "app.emergent.sh" }
+        { name: "Lovable.dev", url: "lovable.dev", yt: "https://www.youtube.com/embed/sF824D48RkE" },
+        { name: "Emergent", url: "app.emergent.sh", yt: "https://www.youtube.com/embed/v53X_cSXGxM" }
       ],
       app: [
-        { name: "Claude AI", url: "claude.ai" },
-        { name: "Codex AI", url: "openai.com" }
+        { name: "Claude AI", url: "claude.ai", yt: "https://www.youtube.com/embed/iXOV0qtCsWM" },
+        { name: "Codex AI", url: "openai.com", yt: "https://www.youtube.com/embed/X_TbI4fueBI" }
       ]
     },
     mentorScript: "AI doesn't replace your creativity.\nIt multiplies it."
@@ -67,18 +67,17 @@ export const ideathonData = {
   scene6: {
     title: "Level 1 (Class Competition)",
     weeks: [
-      { week: "Week 1", name: "Ideation", tasks: ["Team Formation", "Understand Problem", "Brainstorm"] },
-      { week: "Week 2", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
-      { week: "Week 3", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
+      { week: "Week 1", date: "April 5 - April 11", name: "Ideation", tasks: ["Team Formation", "Understand Problem", "Brainstorm"] },
+      { week: "Week 2", date: "April 12 - April 18", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
+      { week: "Week 3", date: "April 19 - April 25", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
     ],
     winnersInfo: "Winners Selected: 2 Teams per Class"
   },
   scene7: {
     title: "Welcome to Level 2",
     subtitle: "Inter-Class Competition",
-    flow: ["Winning Teams", "One Team from each Grade", "6 Finalists"],
+    flow: ["Winning Teams", "One Team from each Grade"],
     presentationIncludes: ["Problem Statement", "Unique Solution", "Working Prototype (Mandatory)", "Final Pitch"],
-    bonus: "Bonus Opportunity: Runner-up teams may receive Internship Opportunities",
     mentorScript: "Level 2 isn't about reaching the finals.\nIt's about proving your solution actually works."
   },
   scene8: {
