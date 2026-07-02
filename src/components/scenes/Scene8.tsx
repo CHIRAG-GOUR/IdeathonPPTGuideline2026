@@ -137,7 +137,7 @@ export default function Scene8() {
     show: (i: number) => ({ 
       opacity: 1, 
       x: 0, 
-      transition: { type: "spring", bounce: 0.5, delay: 0.5 + i * 0.4 } 
+      transition: { type: "spring" as const, bounce: 0.5, delay: 0.5 + i * 0.4 } 
     })
   };
 
@@ -146,7 +146,7 @@ export default function Scene8() {
     show: (i: number) => ({ 
       opacity: 1, 
       x: 0, 
-      transition: { type: "spring", bounce: 0.5, delay: 0.7 + i * 0.4 } 
+      transition: { type: "spring" as const, bounce: 0.5, delay: 0.7 + i * 0.4 } 
     })
   };
 
