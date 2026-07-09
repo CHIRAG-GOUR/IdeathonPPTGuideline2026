@@ -26,16 +26,16 @@ export default function Scene10() {
         
         {/* Realistic Image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, type: "spring" as const, bounce: 0.5 }}
-          className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-2xl border-8 border-blue-400 glow-blue"
+          transition={{ duration: 0.8, type: "spring" as const, bounce: 0.3 }}
+          className="relative w-full max-w-3xl aspect-[16/9] max-h-[350px] rounded-2xl overflow-hidden shadow-md border border-gray-200 shrink-0"
         >
           <Image 
-            src="/media/scene10.png" 
-            alt="Confident student holding lightbulb" 
+            src="/media/scene10_new.png" 
+            alt="Confident students holding lightbulb" 
             fill 
-            className="object-cover"
+            className="object-cover object-center"
           />
         </motion.div>
 
@@ -45,7 +45,7 @@ export default function Scene10() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
           className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-gray-900 drop-shadow-xl text-center"
-        >
+         style={{ WebkitTextStroke: '1.5px #000' }}>
           {ideathonData.scene10.title}
         </motion.h1>
 
@@ -54,15 +54,15 @@ export default function Scene10() {
           variants={callToActionVariants}
           initial="hidden"
           animate="show"
-          className="flex flex-wrap justify-center gap-4 md:gap-8 max-w-5xl"
+          className="flex flex-row flex-nowrap justify-center items-center gap-2 md:gap-4 max-w-6xl w-full"
         >
           {ideathonData.scene10.callToAction.map((phrase, i) => (
             <motion.div 
               key={i} 
               variants={wordItem} 
-              className="px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 flex items-center justify-center transform hover:scale-110 transition-transform duration-300"
+              className="px-4 py-3 flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center transform hover:-translate-y-1 hover:shadow-md transition-all duration-300"
             >
-              <span className="text-xl md:text-3xl font-black text-gray-800 uppercase tracking-wider">{phrase}</span>
+              <span className="text-sm md:text-xl lg:text-2xl font-black text-blue-700 uppercase tracking-widest text-center">{phrase}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -72,9 +72,9 @@ export default function Scene10() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="max-w-3xl mt-2 p-6 rounded-3xl bg-gray-900 shadow-2xl relative text-center border border-blue-500/30 glow-blue"
+          className="max-w-3xl mt-2 p-6 rounded-xl bg-gray-900 shadow-lg relative text-center border border-gray-800"
         >
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-blue-700 text-white px-6 py-1 rounded-full font-bold text-sm tracking-widest uppercase shadow-md">
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-700 text-white px-6 py-1 rounded-full font-bold text-sm tracking-widest uppercase shadow-sm">
             Remember
           </div>
           <p className="text-lg md:text-xl text-white font-bold leading-relaxed whitespace-pre-line">

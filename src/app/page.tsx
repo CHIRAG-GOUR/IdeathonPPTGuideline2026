@@ -13,10 +13,11 @@ import Scene7 from "@/components/scenes/Scene7";
 import Scene8 from "@/components/scenes/Scene8";
 import Scene9 from "@/components/scenes/Scene9";
 import Scene10 from "@/components/scenes/Scene10";
-import { ProceduralTrophy } from "@/components/scenes/Scene8";
+import Scene11 from "@/components/scenes/Scene11";
 import { Canvas } from "@react-three/fiber";
+import { Trophy, Maximize, Minimize } from "lucide-react";
 
-const TOTAL_SCENES = 10;
+const TOTAL_SCENES = 11;
 
 export default function Presentation() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -97,18 +98,13 @@ export default function Presentation() {
       case 7: return <Scene8 key="scene8" />;
       case 8: return <Scene9 key="scene9" />;
       case 9: return <Scene10 key="scene10" />;
+      case 10: return <Scene11 key="scene11" />;
       default: return null;
     }
   };
 
   return (
     <>
-      {/* Hidden WebGL Canvas to preload shaders and geometry, eliminating Scene 8 mount lag */}
-      <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: '1px', height: '1px', zIndex: -100, overflow: 'hidden' }}>
-        <Canvas>
-          <ProceduralTrophy />
-        </Canvas>
-      </div>
 
       {!hasStarted ? (
         <main
@@ -128,19 +124,19 @@ export default function Presentation() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="text-6xl md:text-8xl mb-8 drop-shadow-lg"
+              className="mb-8 drop-shadow-sm text-yellow-500"
             >
-              🏆
+              <Trophy size={80} strokeWidth={1.5} />
             </motion.div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight gold-shimmer-text mb-4 leading-tight" style={{ WebkitTextStroke: '2px #111111' }}>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight mb-4 leading-tight text-gray-900" style={{ WebkitTextStroke: '2px #111111', color: 'transparent' }}>
               SkilliZee Ideathon 2026
             </h1>
-            <h2 className="text-xl md:text-3xl font-bold uppercase tracking-[0.15em] silver-shimmer-text mb-10">
+            <h2 className="text-xl md:text-3xl font-bold uppercase tracking-[0.15em] text-gray-600 mb-10">
               PPT Guidelines
             </h2>
 
-            <div className="glass-warm px-8 py-4 rounded-full glow-gold">
+            <div className="bg-white border border-gray-200 px-8 py-4 rounded-full shadow-md">
               <span className="text-sm md:text-base text-gray-600 uppercase tracking-[0.2em] font-bold animate-pulse">
                 Click anywhere to begin
               </span>
@@ -159,16 +155,16 @@ export default function Presentation() {
             </AnimatePresence>
           </div>
 
-          {/* Navigation Indicators – glass pill */}
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 glass-warm px-2 py-4 rounded-full">
+          {/* Navigation Indicators */}
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 bg-white/90 shadow-md border border-gray-200 px-2 py-4 rounded-full">
             {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveScene(idx)}
                 className={`w-3 rounded-full transition-all duration-300 ${
                   idx === activeScene
-                    ? "bg-gradient-to-b from-yellow-400 to-yellow-600 h-8 glow-gold"
-                    : "bg-gray-300/60 h-3 hover:bg-yellow-300/60"
+                    ? "bg-blue-600 h-8 shadow-sm"
+                    : "bg-gray-300 h-3 hover:bg-blue-400"
                 }`}
               />
             ))}
@@ -177,9 +173,9 @@ export default function Presentation() {
           {/* Fullscreen Toggle */}
           <button
             onClick={toggleFullscreen}
-            className="absolute top-6 right-6 z-50 p-3 glass-warm hover:glow-gold text-gray-600 hover:text-yellow-600 rounded-full transition-all duration-300"
+            className="absolute top-6 right-6 z-50 p-3 bg-white hover:bg-gray-50 border border-gray-200 shadow-sm text-gray-600 hover:text-blue-600 rounded-full transition-all duration-300"
           >
-            <span className="text-xl leading-none">{isFullscreen ? "🗗" : "⛶"}</span>
+            {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
           </button>
         </main>
       )}

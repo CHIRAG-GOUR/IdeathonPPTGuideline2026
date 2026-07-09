@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
+import { Calendar } from "lucide-react";
 
 export default function Scene9() {
   const container = {
@@ -42,13 +43,13 @@ export default function Scene9() {
           className="text-center mb-10"
         >
           <motion.div 
-            animate={{ y: [0, -6, 0] }}
-            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-            className="inline-block p-4 glass-warm rounded-full glow-blue mb-4 border border-blue-200"
+            animate={{ y: [0, -4, 0] }}
+            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+            className="inline-flex p-4 bg-white rounded-xl shadow-sm mb-4 border border-blue-100 text-blue-600"
           >
-            <span className="text-4xl">📅</span>
+            <Calendar size={40} />
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black text-blue-700 uppercase tracking-widest drop-shadow-sm">
+          <h2 className="text-4xl md:text-6xl font-black text-blue-700 uppercase tracking-widest drop-shadow-sm" style={{ WebkitTextStroke: '1.5px #000' }}>
             {ideathonData.scene9.title}
           </h2>
         </motion.div>
@@ -76,16 +77,16 @@ export default function Scene9() {
               className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10 w-full group"
             >
               {/* Week indicator */}
-              <div className="w-20 md:w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-2">
-                <div className="bg-gradient-to-r from-blue-800 to-blue-900 text-white font-black px-6 py-3 rounded-2xl shadow-lg w-full text-center md:text-right border border-blue-500/40 glow-blue group-hover:shadow-blue-500/50 transition-all duration-300">
+              <div className="w-20 md:w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-1">
+                <div className="bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm w-full text-center md:text-right border border-blue-600 transition-all duration-300">
                   {date.week}
                 </div>
               </div>
               {/* Removed Timeline dot as per request */}
 
               {/* Event card */}
-              <div className="flex-1 bg-white/90 backdrop-blur-sm p-5 rounded-2xl border-l-8 border-blue-400 w-full shadow-md group-hover:shadow-2xl group-hover:border-blue-600 group-hover:translate-x-2 transition-all duration-300 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-200/0 via-blue-200/20 to-blue-200/0 -translate-x-full group-hover:animate-[shine_1s_ease-in-out]"></div>
+              <div className="flex-1 bg-white p-5 rounded-xl border-l-4 border-blue-500 w-full shadow-sm group-hover:shadow-md transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 via-blue-50/50 to-blue-50/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
                 <span className="text-xl font-bold text-gray-800 tracking-wide">{date.event}</span>
               </div>
             </motion.div>

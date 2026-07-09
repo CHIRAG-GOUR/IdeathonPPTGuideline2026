@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
 import Image from "next/image";
+import { Medal, Trophy } from "lucide-react";
 
 export default function Scene2() {
   const container = {
@@ -20,12 +21,16 @@ export default function Scene2() {
   };
 
   const levelStyles = [
-    "from-gray-200 via-gray-100 to-gray-300 border-gray-300 glow-silver",
-    "from-orange-200 via-orange-100 to-amber-400 border-orange-300 glow-bronze",
-    "from-blue-200 via-blue-100 to-blue-500 border-blue-400 glow-blue"
+    "from-gray-100 to-gray-200 border-gray-300",
+    "from-orange-50 to-orange-100 border-orange-200",
+    "from-blue-50 to-blue-100 border-blue-200"
   ];
 
-  const levelIcons = ["🥈", "🥉", "🥇"];
+  const levelIcons = [
+    <Medal key="silver" className="w-8 h-8 text-gray-500" />, 
+    <Medal key="bronze" className="w-8 h-8 text-orange-500" />, 
+    <Trophy key="gold" className="w-8 h-8 text-blue-600" />
+  ];
 
   return (
     <SceneWrapper>
@@ -36,7 +41,7 @@ export default function Scene2() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className="text-3xl md:text-5xl lg:text-6xl font-black text-blue-600 uppercase tracking-wide text-center mb-8 drop-shadow-sm"
-        >
+         style={{ WebkitTextStroke: '1.5px #000' }}>
           {ideathonData.scene2.title}
         </motion.h2>
 
@@ -52,12 +57,12 @@ export default function Scene2() {
               variants={item} 
               className="relative w-full md:w-1/3 flex flex-col items-center"
             >
-              <div className={`w-full p-6 rounded-3xl shadow-lg border-2 bg-gradient-to-br flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:shadow-xl relative z-10 glass-warm ${levelStyles[i]}`}>
-                <span className="text-4xl mb-2">{levelIcons[i]}</span>
+              <div className={`w-full p-6 rounded-xl shadow-md border bg-gradient-to-br flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-[1.02] hover:shadow-lg relative z-10 ${levelStyles[i]}`}>
+                <div className="mb-3 p-3 bg-white rounded-full shadow-sm">{levelIcons[i]}</div>
                 <span className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2">{lvl.level}</span>
                 <span className="text-xl md:text-2xl font-black text-gray-800 leading-tight mb-4">{lvl.name}</span>
                 
-                <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-inner mt-2 border-2 border-white/50 bg-gray-200">
+                <div className="relative w-full aspect-square md:aspect-[4/3] rounded-lg overflow-hidden shadow-inner mt-2 border border-white/50 bg-gray-100">
                   <Image 
                     src={`/media/scene2_level${i + 1}.png`} 
                     alt={lvl.name} 

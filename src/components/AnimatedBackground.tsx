@@ -28,32 +28,35 @@ export default function AnimatedBackground() {
     window.addEventListener("resize", handleResize);
 
     const palette = [
-      "rgba(255,215,0,",   // Gold
-      "rgba(218,165,32,",  // Dark-Gold
-      "rgba(192,192,192,", // Silver
-      "rgba(205,127,50,",  // Bronze
-      "rgba(255,235,150,", // Light-Gold
+      "rgba(252, 211, 77,",  // amber-300
+      "rgba(251, 191, 36,",  // amber-400
+      "rgba(245, 158, 11,",  // amber-500
+      "rgba(253, 230, 138,", // amber-200
+      "rgba(217, 119, 6,",   // amber-600
+      "rgba(167, 139, 250,", // violet-400 (hint of lavender)
     ];
 
     // ---------- Orbs ----------
     interface Orb {
-      x: number;
-      y: number;
+      baseX: number;
+      baseY: number;
       r: number;
-      vx: number;
-      vy: number;
+      speed: number;
+      phaseX: number;
+      phaseY: number;
       color: string;
       alpha: number;
     }
 
-    const orbs: Orb[] = Array.from({ length: 12 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: 200 + Math.random() * 350,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
+    const orbs: Orb[] = Array.from({ length: 15 }, () => ({
+      baseX: Math.random() * width,
+      baseY: Math.random() * height,
+      r: 300 + Math.random() * 400, // larger for more smoke-like blending
+      speed: 0.0005 + Math.random() * 0.001,
+      phaseX: Math.random() * Math.PI * 2,
+      phaseY: Math.random() * Math.PI * 2,
       color: palette[Math.floor(Math.random() * palette.length)],
-      alpha: 0.15 + Math.random() * 0.2, // increased opacity for more pop
+      alpha: 0.15 + Math.random() * 0.25, 
     }));
 
     // ---------- Smoke Waves (Ribbons) ----------
@@ -67,11 +70,11 @@ export default function AnimatedBackground() {
       alpha: number;
     }
 
-    const waves: Wave[] = Array.from({ length: 5 }, (_, i) => ({
-      y: (height / 6) * (i + 1) + (Math.random() * 200 - 100),
+    const waves: Wave[] = Array.from({ length: 6 }, (_, i) => ({
+      y: (height / 7) * (i + 1) + (Math.random() * 200 - 100),
       length: 0.001 + Math.random() * 0.002,
-      amplitude: 50 + Math.random() * 150,
-      speed: 0.005 + Math.random() * 0.01,
+      amplitude: 100 + Math.random() * 200,
+      speed: 0.0015 + Math.random() * 0.0025,
       color: palette[Math.floor(Math.random() * palette.length)],
       phase: Math.random() * Math.PI * 2,
       alpha: 0.1 + Math.random() * 0.2,
@@ -93,8 +96,8 @@ export default function AnimatedBackground() {
       x: Math.random() * width,
       y: Math.random() * height,
       r: 1.5 + Math.random() * 3,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
       life: Math.random() * 300,
       maxLife: 300 + Math.random() * 300,
       color: palette[Math.floor(Math.random() * palette.length)],
@@ -106,32 +109,29 @@ export default function AnimatedBackground() {
     const draw = () => {
       time += 1;
 
-      // Soft cream / off-white base
-      ctx.fillStyle = "#FFFDF7";
+      // Soft off-white base
+      ctx.fillStyle = "#fffbeb"; // amber-50
       ctx.fillRect(0, 0, width, height);
 
-      // 1. Draw flowing orbs
+      // 1. Draw flowing orbs (swirling like smoke)
       for (const orb of orbs) {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
-
-        // Bounce gently
-        if (orb.x - orb.r < -200 || orb.x + orb.r > width + 200) orb.vx *= -1;
-        if (orb.y - orb.r < -200 || orb.y + orb.r > height + 200) orb.vy *= -1;
+        // Swirling motion using sin/cos
+        const x = orb.baseX + Math.sin(time * orb.speed + orb.phaseX) * 400;
+        const y = orb.baseY + Math.cos(time * orb.speed + orb.phaseY) * 300;
 
         const grad = ctx.createRadialGradient(
-          orb.x,
-          orb.y,
+          x,
+          y,
           0,
-          orb.x,
-          orb.y,
+          x,
+          y,
           orb.r
         );
         grad.addColorStop(0, orb.color + String(orb.alpha) + ")");
         grad.addColorStop(1, orb.color + "0)");
 
         ctx.fillStyle = grad;
-        ctx.fillRect(orb.x - orb.r, orb.y - orb.r, orb.r * 2, orb.r * 2);
+        ctx.fillRect(x - orb.r, y - orb.r, orb.r * 2, orb.r * 2);
       }
 
       // 2. Draw Smoke Waves
@@ -144,7 +144,7 @@ export default function AnimatedBackground() {
           const y =
             wave.y +
             Math.sin(x * wave.length + wave.phase + time * wave.speed) * wave.amplitude * 0.5 +
-            Math.cos(x * wave.length * 0.5 - wave.phase - time * wave.speed * 1.5) * wave.amplitude * 0.5;
+            Math.cos(x * wave.length * 0.5 - wave.phase - time * wave.speed * 0.5) * wave.amplitude * 0.5;
           ctx.lineTo(x, y);
         }
 
@@ -204,10 +204,25 @@ export default function AnimatedBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 w-full h-full z-0 pointer-events-none"
-      aria-hidden="true"
-    />
+    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+      {/* Canvas for animated gradient blobs */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full blur-[80px] opacity-60 mix-blend-multiply"
+        aria-hidden="true"
+      />
+
+      {/* Math notebook grid overlay */}
+      <div 
+        className="absolute inset-0 w-full h-full"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(245, 158, 11, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(245, 158, 11, 0.15) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px'
+        }}
+      />
+    </div>
   );
 }

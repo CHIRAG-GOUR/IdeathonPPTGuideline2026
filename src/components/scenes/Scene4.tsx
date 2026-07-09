@@ -28,10 +28,10 @@ export default function Scene4() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h2 className="text-4xl md:text-6xl font-black text-blue-600 uppercase tracking-widest drop-shadow-sm">
+          <h2 className="text-4xl md:text-6xl font-black text-blue-600 uppercase tracking-widest drop-shadow-sm" style={{ WebkitTextStroke: '1.5px #000' }}>
             {ideathonData.scene4.title}
           </h2>
-          <div className="mt-4 inline-block px-6 py-2 glass-warm rounded-full glow-blue">
+          <div className="mt-4 inline-block px-6 py-2 bg-blue-50 border border-blue-200 rounded-full">
             <span className="text-blue-700 font-bold uppercase tracking-wider">{ideathonData.scene4.teamInfo}</span>
           </div>
         </motion.div>
@@ -40,37 +40,41 @@ export default function Scene4() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-5 gap-4 w-full my-6 relative"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full max-w-5xl relative"
         >
-          {/* Connector Line */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-gray-300 via-blue-300 to-blue-500 -z-10 -translate-y-1/2 rounded-full"></div>
-
           {ideathonData.scene4.steps.map((step, i) => (
             <motion.div 
               key={i} 
               variants={item} 
-              className="flex flex-col items-center glass-warm p-4 pt-8 mt-6 rounded-2xl relative z-10 hover:glow-blue transition-all duration-300 hover:-translate-y-2 h-full"
+              className="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm relative z-10 hover:shadow-md transition-all duration-300 hover:-translate-y-1 w-full overflow-hidden group"
             >
-              <div className="absolute -top-6 w-12 h-12 rounded-full bg-gradient-to-br from-blue-300 to-blue-500 text-white font-black flex items-center justify-center text-xl shadow-md border-2 border-white glow-blue z-20">
+              {/* Number Badge */}
+              <div className="absolute top-2 left-2 w-7 h-7 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-xs shadow-md border-2 border-white z-20">
                 {i + 1}
               </div>
-              <div className="relative w-full aspect-square md:aspect-[4/5] rounded-xl overflow-hidden mb-4 border-2 border-blue-200/50 shadow-inner">
+              
+              {/* Image Section */}
+              <div className="relative w-full h-32 md:h-40 bg-gray-100 overflow-hidden border-b border-gray-100">
                 <Image 
                   src={`/media/scene4_step${i + 1}.png`}
                   alt={step.name}
                   fill
-                  className="object-cover hover:scale-110 transition-transform duration-700"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <h3 className="text-sm text-gray-500 font-bold uppercase mb-1">{step.step}</h3>
-              <h4 className="text-lg font-bold text-gray-800 text-center leading-tight mb-3">
-                {step.name}
-              </h4>
-              {step.desc && (
-                <p className="text-sm font-bold text-blue-800 text-center bg-blue-100/60 p-3 rounded-xl w-full whitespace-pre-line mt-auto border border-blue-300 shadow-sm">
-                  {step.desc}
-                </p>
-              )}
+
+              {/* Text Section */}
+              <div className="flex flex-col p-4 flex-1 text-left">
+                <h3 className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mb-1">{step.step}</h3>
+                <h4 className="text-base font-black text-gray-800 leading-tight mb-2">
+                  {step.name}
+                </h4>
+                {step.desc && (
+                  <p className="text-xs font-semibold text-gray-600 leading-relaxed mt-auto">
+                    {step.desc}
+                  </p>
+                )}
+              </div>
             </motion.div>
           ))}
         </motion.div>

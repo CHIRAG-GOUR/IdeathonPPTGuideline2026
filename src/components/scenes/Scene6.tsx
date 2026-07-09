@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
 import Image from "next/image";
+import { ChevronRight } from "lucide-react";
 
 export default function Scene6() {
   const container = {
@@ -19,10 +20,10 @@ export default function Scene6() {
     show: { opacity: 1, x: 0, transition: { type: "spring" as const, bounce: 0.3 } }
   };
 
-  const weekColors = [
-    "border-l-blue-500",
-    "border-l-gray-400",
-    "border-l-blue-400"
+  const cardStyles = [
+    { bg: "bg-blue-50", border: "border-blue-400", title: "text-blue-800", dateBg: "bg-blue-100", dateText: "text-blue-700", icon: "text-blue-500" },
+    { bg: "bg-indigo-50", border: "border-indigo-400", title: "text-indigo-800", dateBg: "bg-indigo-100", dateText: "text-indigo-700", icon: "text-indigo-500" },
+    { bg: "bg-purple-50", border: "border-purple-400", title: "text-purple-800", dateBg: "bg-purple-100", dateText: "text-purple-700", icon: "text-purple-500" }
   ];
 
   return (
@@ -34,7 +35,7 @@ export default function Scene6() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8 relative inline-block w-full"
         >
-          <h2 className="relative z-10 text-4xl md:text-5xl font-black text-gray-800 uppercase tracking-widest drop-shadow-sm">
+          <h2 className="relative z-10 text-4xl md:text-5xl font-black text-gray-800 uppercase tracking-widest drop-shadow-sm" style={{ WebkitTextStroke: '1.5px #000' }}>
             {ideathonData.scene6.title}
           </h2>
         </motion.div>
@@ -49,9 +50,9 @@ export default function Scene6() {
             <motion.div 
               key={i} 
               variants={item} 
-              className={`bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border-t-8 ${weekColors[i].replace('border-l', 'border-t')} p-6 flex flex-col relative overflow-hidden hover:-translate-y-2 transition-all duration-300 h-full`}
+              className={`${cardStyles[i].bg} rounded-xl shadow-md border-t-4 ${cardStyles[i].border} p-6 flex flex-col relative overflow-hidden hover:-translate-y-1 transition-all duration-300 h-full border-x border-b border-gray-200/50`}
             >
-              <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden mb-4 relative shadow-md">
+              <div className={`w-full aspect-[4/3] rounded-lg overflow-hidden mb-4 relative shadow-sm border border-white`}>
                 <Image 
                   src={`/media/scene6_week${i + 1}.png`} 
                   alt={week.name} 
@@ -60,19 +61,19 @@ export default function Scene6() {
                 />
               </div>
 
-              <div className="flex flex-col items-center border-b-2 border-gray-100 pb-3 mb-3 text-center">
+              <div className={`flex flex-col items-center border-b border-black/5 pb-3 mb-3 text-center`}>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">{week.week}</span>
-                  <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{week.date}</span>
+                  <span className="text-sm font-bold text-gray-500 uppercase tracking-wider">{week.week}</span>
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${cardStyles[i].dateBg} ${cardStyles[i].dateText}`}>{week.date}</span>
                 </div>
-                <span className="text-xl font-black text-gray-800 leading-tight">{week.name}</span>
+                <span className={`text-xl font-black leading-tight ${cardStyles[i].title}`}>{week.name}</span>
               </div>
               
               <div className="flex-1">
                 <ul className="flex flex-col gap-2">
                   {week.tasks.map((task, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm font-bold text-gray-600">
-                      <span className="text-blue-500 mt-0.5">▶</span>
+                    <li key={j} className="flex items-start gap-2 text-sm font-bold text-gray-700">
+                      <ChevronRight size={16} className={`${cardStyles[i].icon} mt-0.5 shrink-0`} />
                       {task}
                     </li>
                   ))}
@@ -86,7 +87,7 @@ export default function Scene6() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-blue-600 text-white px-8 py-3 rounded-full text-center shadow-lg mt-8"
+          className="bg-blue-700 text-white px-8 py-3 rounded-xl shadow-md mt-8 border border-blue-600"
         >
           <h3 className="text-xl font-black uppercase tracking-wider">
             {ideathonData.scene6.winnersInfo}
