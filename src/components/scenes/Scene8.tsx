@@ -7,7 +7,7 @@ import { Suspense, useRef, useMemo, useLayoutEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ErrorBoundary } from "../ErrorBoundary";
 import * as THREE from "three";
-import { Sparkles, Banknote, Trophy as TrophyIcon, ScrollText, Laptop } from "lucide-react";
+import { Sparkles, Banknote, Trophy as TrophyIcon, ScrollText, Laptop, Lightbulb, Wrench, Users, Mic, Award } from "lucide-react";
 import Image from "next/image";
 
 function Confetti() {
@@ -159,14 +159,23 @@ export default function Scene8() {
                 The Experience
               </motion.h4>
               <div className="flex flex-col gap-2 md:gap-3 w-full">
-                {ideathonData.scene8.experience.map((exp, i) => (
-                  <motion.div key={i} custom={i} variants={itemLeft} initial="hidden" animate="show" className="flex items-center gap-3 bg-white/90 backdrop-blur-md p-3 px-4 rounded-xl shadow-md border border-gray-200 w-full max-w-[320px]">
-                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
-                      <Sparkles size={16} className="text-blue-600" />
-                    </div>
-                    <span className="text-xs md:text-sm font-bold text-gray-800 leading-tight">{exp}</span>
-                  </motion.div>
-                ))}
+                {ideathonData.scene8.experience.map((exp, i) => {
+                  let ExpIcon = Sparkles;
+                  if (exp.toLowerCase().includes('masterclass') || exp.toLowerCase().includes('innovation')) ExpIcon = Lightbulb;
+                  else if (exp.toLowerCase().includes('prototype') || exp.toLowerCase().includes('refinement')) ExpIcon = Wrench;
+                  else if (exp.toLowerCase().includes('network')) ExpIcon = Users;
+                  else if (exp.toLowerCase().includes('pitch')) ExpIcon = Mic;
+                  else if (exp.toLowerCase().includes('ceremony') || exp.toLowerCase().includes('prize')) ExpIcon = Award;
+
+                  return (
+                    <motion.div key={i} custom={i} variants={itemLeft} initial="hidden" animate="show" className="flex items-center gap-3 bg-white/90 backdrop-blur-md p-3 px-4 rounded-xl shadow-md border border-gray-200 w-full max-w-[320px]">
+                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100 shadow-inner">
+                        <ExpIcon size={16} className="text-blue-600" />
+                      </div>
+                      <span className="text-xs md:text-sm font-bold text-gray-800 leading-tight">{exp}</span>
+                    </motion.div>
+                  );
+                })}
               </div>
               <motion.p 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}
