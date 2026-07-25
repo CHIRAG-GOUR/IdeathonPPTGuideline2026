@@ -41,7 +41,7 @@ export default function Scene4() {
   return (
     <SceneWrapper>
       <div className="w-full h-full flex flex-col items-center p-4 max-w-6xl mx-auto overflow-hidden">
-        
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -60,28 +60,28 @@ export default function Scene4() {
         <div className="flex-1 w-full flex items-center justify-center mt-6 md:mt-10">
           {/* This 0x0 div acts as our absolute center point. We use CSS scale for perfect responsiveness! */}
           <div className="relative w-0 h-0 scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-[0.95] xl:scale-100">
-            
+
             {/* Central Hub */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, type: "spring", delay: 0.2 }}
               className="absolute -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-blue-600 to-blue-900 rounded-full shadow-2xl flex flex-col items-center justify-center z-20 border-[5px] border-white ring-4 ring-blue-200"
             >
               <Zap className="text-yellow-400 mb-1 drop-shadow-md" size={36} fill="currentColor" />
-              <span className="text-white font-black text-sm uppercase tracking-widest text-center leading-tight">The<br/>Process</span>
+              <span className="text-white font-black text-sm uppercase tracking-widest text-center leading-tight">The<br />Process</span>
             </motion.div>
 
             {/* SVG Arrows pointing from center to cards */}
             <motion.div variants={container} initial="hidden" animate="show" className="absolute z-0">
               {arrows.map((arrow, i) => (
-                <div 
+                <div
                   key={i}
                   className="absolute origin-left"
-                  style={{ 
+                  style={{
                     left: 0,
                     top: -12, // vertically center the 24px tall SVG exactly on 0
-                    transform: `rotate(${arrow.rot}deg)` 
+                    transform: `rotate(${arrow.rot}deg)`
                   }}
                 >
                   <motion.div
@@ -91,7 +91,7 @@ export default function Scene4() {
                     }}
                     className="origin-left"
                   >
-                    <svg 
+                    <svg
                       style={{ width: arrow.len + 20, height: 24, marginLeft: 80, overflow: 'visible' }}
                       className="drop-shadow-md"
                     >
@@ -108,23 +108,23 @@ export default function Scene4() {
             {/* Cards */}
             <motion.div variants={container} initial="hidden" animate="show" className="absolute z-10">
               {ideathonData.scene4.steps.map((step, i) => (
-                <motion.div 
-                  key={i} 
-                  variants={item} 
+                <motion.div
+                  key={i}
+                  variants={item}
                   className="absolute -translate-x-1/2 -translate-y-1/2 w-[260px] flex flex-col bg-white border border-gray-200 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden group"
-                  style={{ 
-                    left: positions[i].x, 
-                    top: positions[i].y 
+                  style={{
+                    left: positions[i].x,
+                    top: positions[i].y
                   }}
                 >
                   {/* Number Badge */}
                   <div className="absolute -top-1 -left-1 w-10 h-10 rounded-br-2xl rounded-tl-2xl bg-blue-600 text-white font-black flex items-center justify-center text-base shadow-md z-20 border-r-2 border-b-2 border-white/20">
                     {i + 1}
                   </div>
-                  
+
                   {/* Image Section */}
                   <div className="relative w-full h-[120px] bg-gray-100 overflow-hidden border-b border-gray-100">
-                    <Image 
+                    <Image
                       src={`/media/scene4_step${i + 1}.png`}
                       alt={step.name}
                       fill

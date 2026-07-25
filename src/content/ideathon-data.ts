@@ -44,6 +44,61 @@ export const ideathonData = {
     ],
     mentorScript: "Don't wait for the perfect idea.\nBuild.\nTest.\nImprove."
   },
+  sceneGuidelines: {
+    title: "Ideathon 2026 — Student Guidelines",
+    subtitle: "Build an AI Prototype That Solves a Real Problem",
+    intro: "You can build anything that works — not just a website or app: Physical models, Robots, Wearables, IoT devices, Dashboards, AI Assistants. A working physical model is compulsory to qualify for the second round. Pick ONE genre below and build a working prototype for it.",
+    genres: [
+      {
+        id: 1,
+        title: "Mental Health",
+        problem: "Millions struggle silently with stress due to a lack of private, low-pressure ways to check in on their mental health.",
+        challenge: "Design a private, AI-powered device or wearable that serves as a judgment-free first step for mental well-being.",
+        tip: "Keep it private. If it feels like it's 'watching', it will fail."
+      },
+      {
+        id: 2,
+        title: "Healthcare",
+        problem: "Small clinics and schools lack basic diagnostic tools. Serious conditions go undetected.",
+        challenge: "Build a low-cost, portable AI health-screening device (e.g., fingertip scan or vision kit).",
+        business: "Sell as a subscription to schools, rural clinics, corporate CSR."
+      },
+      {
+        id: 3,
+        title: "Public Sector",
+        problem: "Cities struggle with undetected road damage until accidents happen due to lack of early detection.",
+        challenge: "Build a low-cost AI device for vehicles to automatically map road damage.",
+        business: "Sell live map dashboard to Municipal corporations, PWD, and Cab companies."
+      },
+      {
+        id: 4,
+        title: "Family Business Innovation",
+        problem: "Small family businesses lose money daily due to untracked issues like stockouts or spoiled goods.",
+        challenge: "Visit a family business, identify one real costly problem, and design an AI tool to fix it.",
+        tip: "You MUST talk to the actual business owner or staff first."
+      },
+      {
+        id: 5,
+        title: "Problem-Solving Startup (Pitch)",
+        problem: "Millions face everyday problems where existing solutions are too expensive or inaccessible.",
+        challenge: "Identify a widespread problem and design a working, affordable startup product to solve it.",
+        tip: "You need a working model AND a simple business plan (who pays, why choose you)."
+      }
+    ],
+    demo: [
+      "Show your model working live — don't just show slides",
+      "Let the judge try it themselves (press it, walk past it, show an object)",
+      "Show the website or app made",
+      "Explain the real problem it solves, in one sentence"
+    ],
+    checklist: [
+      "I picked one genre",
+      "My prototype is a working model, not just a slide",
+      "It uses AI to sense → think → act",
+      "I can explain the real problem it solves in one line",
+      "(Family Business only) I talked to the actual business owner/staff"
+    ]
+  },
   scene5: {
     title: "Your Secret Superpowers",
     subtitle: "Smart Innovators Use Smart Tools (AI Tools)",
