@@ -15,6 +15,22 @@ export default function Scene11() {
          style={{ WebkitTextStroke: '1.5px #000' }}>
           Thank You
         </motion.h1>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          className="mt-16"
+        >
+          <a 
+            href="https://sample-ppt-ideathon2026.vercel.app/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-8 py-4 bg-blue-700 text-white font-bold rounded-xl text-2xl shadow-lg hover:bg-blue-800 hover:shadow-xl transition-all border-2 border-black uppercase tracking-wider"
+          >
+            Sample PPT
+          </a>
+        </motion.div>
       </div>
     </SceneWrapper>
   );
