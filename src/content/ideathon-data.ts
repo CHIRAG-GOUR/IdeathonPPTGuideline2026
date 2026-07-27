@@ -83,6 +83,14 @@ export const ideathonData = {
         problem: "Millions face everyday problems where existing solutions are too expensive or inaccessible.",
         challenge: "Identify a widespread problem and design a working, affordable startup product to solve it.",
         tip: "You need a working model AND a simple business plan (who pays, why choose you)."
+      },
+      {
+        id: 6,
+        title: "Women Safety & Empowerment",
+        problem: "Current safety apps require too many steps to trigger an alert during emergencies.",
+        challenge: "Build a discreet AI wearable (pendant/ring) with a hidden trigger that sends live location to contacts.",
+        business: "Sell subscriptions to schools, corporates, and government CSR.",
+        tip: "Must look like normal jewelry to avoid drawing attention. Filter out accidental taps."
       }
     ],
     demo: [
@@ -124,7 +132,7 @@ export const ideathonData = {
     weeks: [
       { week: "Week 1", date: "July 29", name: "Ideation", tasks: ["Team Formation", "Understand Problem", "Brainstorm"] },
       { week: "Week 2", date: "July 31", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
-      { week: "Week 3", date: "Aug 29", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
+      { week: "Week 3", date: "From 1 Aug to 29 Aug", name: "Submission Time & Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
     ],
     winnersInfo: "Winners Selected: 1 Team per Class"
   },

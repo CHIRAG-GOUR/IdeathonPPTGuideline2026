@@ -47,6 +47,8 @@ export default function Presentation() {
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if (isScrolling.current) return;
+      // Block wheel navigation on the video slide to prevent unmounting the video
+      if (activeScene === 7) return;
 
       isScrolling.current = true;
       if (e.deltaY > 50) {
@@ -67,6 +69,9 @@ export default function Presentation() {
   // Handle Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Block ALL navigation on the video slide — only the video controls should work
+      if (activeScene === 7) return;
+      
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
         nextAction();
       } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {

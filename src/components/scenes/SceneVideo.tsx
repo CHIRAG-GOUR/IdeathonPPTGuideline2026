@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Type, Maximize, Minimize } from "lucide-react";
 
 interface Cue {
@@ -14,18 +14,18 @@ interface Cue {
 export default function SceneVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const progressRef = useRef<HTMLInputElement>(null);
+  const timeDisplayRef = useRef<HTMLDivElement>(null);
+  const captionRef = useRef<HTMLSpanElement>(null);
+  const cuesRef = useRef<Cue[]>([]);
+  const playIntentRef = useRef(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [currentTime, setCurrentTime] = useState("0:00");
-  const [currentTimeSec, setCurrentTimeSec] = useState(0);
   const [duration, setDuration] = useState("0:00");
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [captionsEnabled, setCaptionsEnabled] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  
-  const [cues, setCues] = useState<Cue[]>([]);
 
   // Parse VTT time to seconds
   const parseTime = (timeStr: string) => {
@@ -33,44 +33,43 @@ export default function SceneVideo() {
     if (parts.length === 3) {
       const hours = parseInt(parts[0], 10);
       const minutes = parseInt(parts[1], 10);
-      const seconds = parseFloat(parts[2].replace(',', '.')); // Handle both . and , formats just in case
+      const seconds = parseFloat(parts[2].replace(',', '.'));
       return hours * 3600 + minutes * 60 + seconds;
     }
     return 0;
   };
 
-  // Fetch and parse captions manually to guarantee they display over custom controls
+  // Fetch and parse captions
   useEffect(() => {
     fetch('/ideathon.vtt')
       .then(res => res.text())
       .then(text => {
         const parsedCues: Cue[] = [];
-        // Split by double newline to get blocks
         const blocks = text.split(/\n\s*\n/);
-        
+
         blocks.forEach(block => {
           const lines = block.split('\n').map(l => l.trim()).filter(l => l);
           const timeLine = lines.find(l => l.includes('-->'));
-          
+
           if (timeLine) {
             const [startStr, endStr] = timeLine.split('-->');
             const start = parseTime(startStr);
             const end = parseTime(endStr);
-            
+
             const textIndex = lines.indexOf(timeLine) + 1;
             const textContent = lines.slice(textIndex).join(' ');
-            
+
             if (textContent) {
               parsedCues.push({ start, end, text: textContent });
             }
           }
         });
-        setCues(parsedCues);
+        cuesRef.current = parsedCues;
       })
       .catch(err => console.error("Failed to load captions:", err));
   }, []);
 
-  // Format time (seconds to M:SS)
+  // Format time
   const formatTime = (timeInSeconds: number) => {
     if (isNaN(timeInSeconds)) return "0:00";
     const minutes = Math.floor(timeInSeconds / 60);
@@ -78,50 +77,129 @@ export default function SceneVideo() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  // Toggle play/pause
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+  // Safe play that handles the promise properly
+  const safePlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
-  // Update progress bar & current time
-  const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      const current = videoRef.current.currentTime;
-      const total = videoRef.current.duration;
-      if (!isNaN(total) && total > 0) {
-        setProgress((current / total) * 100);
-      }
-      setCurrentTime(formatTime(current));
-      setCurrentTimeSec(current);
+    playIntentRef.current = true;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Silently handle - browser blocked or interrupted
+        playIntentRef.current = false;
+      });
     }
-  };
+  }, []);
+
+  // Toggle play/pause
+  const togglePlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused || video.ended) {
+      safePlay();
+    } else {
+      playIntentRef.current = false;
+      video.pause();
+    }
+  }, [safePlay]);
+
+  // Update progress bar & captions via refs (NO state updates = NO re-renders)
+  const handleTimeUpdate = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const current = video.currentTime;
+    const total = video.duration;
+
+    // Update progress bar directly via DOM
+    if (progressRef.current && !isNaN(total) && total > 0) {
+      progressRef.current.value = String((current / total) * 100);
+    }
+
+    // Update time display directly via DOM
+    if (timeDisplayRef.current) {
+      timeDisplayRef.current.textContent = formatTime(current);
+    }
+
+    // Update captions directly via DOM
+    if (captionRef.current) {
+      const activeCue = cuesRef.current.find(c => current >= c.start && current <= c.end);
+      captionRef.current.textContent = activeCue ? activeCue.text : "";
+      captionRef.current.style.display = activeCue ? "inline" : "none";
+    }
+  }, []);
 
   // Handle video loaded metadata
-  const handleLoadedMetadata = () => {
+  const handleLoadedMetadata = useCallback(() => {
     if (videoRef.current) {
       setDuration(formatTime(videoRef.current.duration));
     }
-  };
+  }, []);
 
   // Seek video
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (videoRef.current) {
-      const seekTime = (Number(e.target.value) / 100) * videoRef.current.duration;
-      videoRef.current.currentTime = seekTime;
-      setProgress(Number(e.target.value));
-      setCurrentTimeSec(seekTime);
-    }
-  };
+  const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    if (!video) return;
+    const seekTime = (Number(e.target.value) / 100) * video.duration;
+    video.currentTime = seekTime;
+  }, []);
+
+  // Auto-resume when browser stalls or waits for data
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleWaiting = () => {
+      // Video is buffering - don't change state, just wait
+    };
+
+    const handleCanPlay = () => {
+      // If we intended to play and the video is paused, resume
+      if (playIntentRef.current && video.paused) {
+        safePlay();
+      }
+    };
+
+    const handleStalled = () => {
+      // Network stall - the video will auto-resume when data arrives
+    };
+
+    const handleError = (e: Event) => {
+      console.warn("Video error:", e);
+    };
+
+    video.addEventListener("waiting", handleWaiting);
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("canplaythrough", handleCanPlay);
+    video.addEventListener("stalled", handleStalled);
+    video.addEventListener("error", handleError);
+
+    return () => {
+      video.removeEventListener("waiting", handleWaiting);
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("canplaythrough", handleCanPlay);
+      video.removeEventListener("stalled", handleStalled);
+      video.removeEventListener("error", handleError);
+    };
+  }, [safePlay]);
+
+  // Block wheel events from bubbling up (prevents accidental slide navigation)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const blockWheel = (e: WheelEvent) => {
+      e.stopPropagation();
+    };
+
+    container.addEventListener("wheel", blockWheel, { passive: true });
+    return () => container.removeEventListener("wheel", blockWheel);
+  }, []);
 
   // Toggle mute
-  const toggleMute = () => {
+  const toggleMute = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
@@ -130,26 +208,26 @@ export default function SceneVideo() {
         videoRef.current.volume = 1;
       }
     }
-  };
+  }, [isMuted, volume]);
 
   // Change volume
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVolumeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
     if (videoRef.current) {
       videoRef.current.volume = newVolume;
       setVolume(newVolume);
       setIsMuted(newVolume === 0);
     }
-  };
+  }, []);
 
   // Toggle fullscreen
-  const toggleFullscreen = () => {
+  const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
       containerRef.current?.requestFullscreen().catch(err => console.log(err));
     } else {
       document.exitFullscreen();
     }
-  };
+  }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -159,9 +237,18 @@ export default function SceneVideo() {
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
-  // Determine active caption
-  const activeCue = cues.find(c => currentTimeSec >= c.start && currentTimeSec <= c.end);
-  const activeCaption = activeCue ? activeCue.text : "";
+  // Handle Spacebar to toggle play/pause
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === " " && document.activeElement?.tagName !== "BUTTON" && document.activeElement?.tagName !== "INPUT") {
+        e.preventDefault();
+        e.stopPropagation();
+        togglePlay();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [togglePlay]);
 
   return (
     <SceneWrapper>
@@ -183,69 +270,74 @@ export default function SceneVideo() {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black relative group flex flex-col"
         >
-          <video 
+          <video
             ref={videoRef}
             className="w-full aspect-video object-contain bg-black cursor-pointer"
             onClick={togglePlay}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
-            onEnded={() => setIsPlaying(false)}
+            onPlay={() => { setIsPlaying(true); playIntentRef.current = true; }}
+            onPause={() => { setIsPlaying(false); }}
+            onEnded={() => { setIsPlaying(false); playIntentRef.current = false; }}
             playsInline
+            preload="auto"
           >
-            <source 
-              src="https://firebasestorage.googleapis.com/v0/b/skillizee-io.firebasestorage.app/o/Video%2Fwalkthrough_with_voiceover.mp4?alt=media&token=066815b9-5ac2-4fd3-8040-e24d7c8d0ae7" 
-              type="video/mp4" 
+            <source
+              src="https://firebasestorage.googleapis.com/v0/b/skillizee-io.firebasestorage.app/o/Video%2Fwalkthrough_with_voiceover.mp4?alt=media&token=b5bec032-2e1a-4182-acef-d94f26667491"
+              type="video/mp4"
             />
-            {/* Native track removed as we are rendering custom captions to guarantee visibility */}
           </video>
 
           {/* Custom Captions Overlay */}
-          {captionsEnabled && activeCaption && (
+          {captionsEnabled && (
             <div className="absolute bottom-24 left-0 right-0 flex justify-center px-8 pointer-events-none z-10 transition-all">
-              <span className="bg-black/70 text-white px-4 py-2 rounded-lg text-lg md:text-xl font-medium tracking-wide text-center drop-shadow-md backdrop-blur-sm">
-                {activeCaption}
-              </span>
+              <span
+                ref={captionRef}
+                className="bg-black/70 text-white px-4 py-2 rounded-lg text-lg md:text-xl font-medium tracking-wide text-center drop-shadow-md backdrop-blur-sm"
+                style={{ display: "none" }}
+              />
             </div>
           )}
 
           {/* Custom Controls */}
           <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 transition-opacity duration-300 z-20 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-            
+
             {/* Seek Bar */}
             <div className="w-full flex items-center mb-3">
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                value={progress}
+              <input
+                ref={progressRef}
+                type="range"
+                min="0"
+                max="100"
+                defaultValue="0"
                 onChange={handleSeek}
                 className="w-full h-1.5 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2 transition-all"
               />
             </div>
 
             <div className="flex items-center justify-between text-white">
-              
+
               <div className="flex items-center gap-5">
                 {/* Play/Pause Button */}
-                <button 
+                <button
                   onClick={togglePlay}
                   className="hover:text-blue-400 transition-colors focus:outline-none"
                 >
                   {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
                 </button>
-                
+
                 {/* Volume Control */}
                 <div className="flex items-center gap-2 group/volume">
-                  <button 
+                  <button
                     onClick={toggleMute}
                     className="hover:text-blue-400 transition-colors focus:outline-none"
                   >
                     {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
                   </button>
-                  <input 
-                    type="range" 
-                    min="0" 
-                    max="1" 
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
                     step="0.05"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
@@ -255,13 +347,13 @@ export default function SceneVideo() {
 
                 {/* Timestamps */}
                 <div className="text-sm font-semibold tracking-wider opacity-90 font-mono">
-                  {currentTime} <span className="opacity-50">/</span> {duration}
+                  <span ref={timeDisplayRef}>0:00</span> <span className="opacity-50">/</span> {duration}
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 {/* Captions Toggle */}
-                <button 
+                <button
                   onClick={() => setCaptionsEnabled(!captionsEnabled)}
                   className={`flex items-center gap-1.5 font-bold text-sm px-2.5 py-1.5 rounded-lg transition-all focus:outline-none ${captionsEnabled ? 'bg-blue-600 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]' : 'bg-white/20 text-white/70 hover:bg-white/30'}`}
                   title={captionsEnabled ? "Turn off Captions" : "Turn on Captions"}
@@ -271,7 +363,7 @@ export default function SceneVideo() {
                 </button>
 
                 {/* Fullscreen Toggle */}
-                <button 
+                <button
                   onClick={toggleFullscreen}
                   className="hover:text-blue-400 transition-colors focus:outline-none ml-2"
                   title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}

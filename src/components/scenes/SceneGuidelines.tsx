@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
-import { CheckCircle, Brain, HeartPulse, ShieldAlert, Store, Rocket, Image as ImageIcon } from "lucide-react";
+import { CheckCircle, Brain, HeartPulse, ShieldAlert, Store, Rocket, Image as ImageIcon, Users } from "lucide-react";
 
 export default function SceneGuidelines() {
   const [activeTab, setActiveTab] = useState(0);
@@ -13,7 +13,7 @@ export default function SceneGuidelines() {
   // Auto-switch tabs every 10 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveTab((prev) => (prev < 4 ? prev + 1 : 0));
+      setActiveTab((prev) => (prev < 5 ? prev + 1 : 0));
     }, 10000);
     return () => clearInterval(timer);
   }, [activeTab]);
@@ -22,7 +22,7 @@ export default function SceneGuidelines() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
-        if (activeTab < 4) {
+        if (activeTab < 5) {
           e.stopPropagation();
           setActiveTab((prev) => prev + 1);
         }
@@ -45,6 +45,7 @@ export default function SceneGuidelines() {
     <ShieldAlert key={2} size={24} />,
     <Store key={3} size={24} />,
     <Rocket key={4} size={24} />,
+    <Users key={5} size={24} />
   ];
 
   const images = [
@@ -52,7 +53,8 @@ export default function SceneGuidelines() {
     "/media/genre_healthcare.png",
     "/media/genre_public_sector.png",
     "/media/genre_family_business.png",
-    "/media/genre_startup.png"
+    "/media/genre_startup.png",
+    "/women_empowerment.png"
   ];
 
   return (
