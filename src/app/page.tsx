@@ -15,10 +15,11 @@ import Scene9 from "@/components/scenes/Scene9";
 import Scene10 from "@/components/scenes/Scene10";
 import Scene11 from "@/components/scenes/Scene11";
 import SceneGuidelines from "@/components/scenes/SceneGuidelines";
+import SceneVideo from "@/components/scenes/SceneVideo";
 import { Canvas } from "@react-three/fiber";
 import { Trophy, Maximize, Minimize } from "lucide-react";
 
-const TOTAL_SCENES = 12;
+const TOTAL_SCENES = 13;
 
 export default function Presentation() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -96,11 +97,12 @@ export default function Presentation() {
       case 4: return <SceneGuidelines key="sceneGuidelines" />;
       case 5: return <Scene5 key="scene5" />;
       case 6: return <Scene6 key="scene6" />;
-      case 7: return <Scene7 key="scene7" />;
-      case 8: return <Scene8 key="scene8" />;
-      case 9: return <Scene9 key="scene9" />;
-      case 10: return <Scene10 key="scene10" />;
-      case 11: return <Scene11 key="scene11" />;
+      case 7: return <SceneVideo key="sceneVideo" />;
+      case 8: return <Scene7 key="scene7" />;
+      case 9: return <Scene8 key="scene8" />;
+      case 10: return <Scene9 key="scene9" />;
+      case 11: return <Scene10 key="scene10" />;
+      case 12: return <Scene11 key="scene11" />;
       default: return null;
     }
   };

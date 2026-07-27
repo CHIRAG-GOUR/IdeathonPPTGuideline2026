@@ -122,9 +122,9 @@ export const ideathonData = {
   scene6: {
     title: "Level 1 (Class Competition)",
     weeks: [
-      { week: "Week 1", date: "April 5 - April 11", name: "Ideation", tasks: ["Team Formation", "Understand Problem", "Brainstorm"] },
-      { week: "Week 2", date: "April 12 - April 18", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
-      { week: "Week 3", date: "April 19 - April 25", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
+      { week: "Week 1", date: "July 29", name: "Ideation", tasks: ["Team Formation", "Understand Problem", "Brainstorm"] },
+      { week: "Week 2", date: "July 31", name: "Mentor Support", tasks: ["Watch Doubt Solving Video", "Q&A", "Finalize Solution", "Start Prototype"] },
+      { week: "Week 3", date: "Aug 29", name: "Presentation Day", tasks: ["Present: Problem, Solution, Prototype, Pitch"] }
     ],
     winnersInfo: "Winners Selected: 1 Team per Class"
   },
