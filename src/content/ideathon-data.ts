@@ -107,6 +107,26 @@ export const ideathonData = {
       "(Family Business only) I talked to the actual business owner/staff"
     ]
   },
+  sceneJuniorProblems: {
+    title: "Junior Problem Statements",
+    subtitle: "For 4th - 5th Grade",
+    problems: [
+      {
+        id: 1,
+        title: "Pocket Money Management",
+        problem: "Every week or month, parents give their kids pocket money — but kids spend it randomly on chips, chocolates, or whatever catches their eye at the canteen, with zero plan. They don't track what they spent it on, don't save any of it, and never learn the basic skill of making money last. Parents, meanwhile, have no visibility into where the money actually goes — so the habit of budgeting never gets built, right when it matters most.",
+        challenge: "Design an AI-powered tool that helps kids manage their own pocket money — starting with something as simple and real as spending at the school canteen.",
+        business: "Build a prepaid digital card (or app-linked card) that parents load with a fixed amount — say ₹200 for the week — usable only at the school canteen. The card/app uses AI to:\n• Show a simple running balance ('You have ₹120 left for 4 more days')\n• Warn before overspending ('At this rate, you'll run out by Wednesday')\n• Give parents a simple dashboard of what was bought and when\n\nSell it as a subscription to:\n• Schools (built into their canteen payment system)\n• Parents (small monthly fee for the tracking/AI features)"
+      },
+      {
+        id: 2,
+        title: "Sustainability & Waste",
+        problem: "(Tiffin waste, E-waste, School project waste)\nEvery school day, kilos of food get thrown out of tiffins because kids don't finish what's packed, or pack more than they'll eat — with no one tracking the pattern. Old phones, chargers, batteries, and broken gadgets pile up at home and in school storerooms because there's no easy way to recycle or repurpose them. Science and craft projects generate cardboard, thermocol, wires, and leftover materials that get dumped after a single use. Nobody is measuring any of this, so the waste just keeps repeating, year after year.",
+        challenge: "Pick ONE type of waste — tiffin, e-waste, or school project waste — and design an AI-powered product or system that reduces it, redirects it, or turns it into something useful.",
+        business: "Build a low-cost AI tool that tracks and reduces waste at the source. For example:\n• A tiffin-waste tracker (camera + AI at the school bin) that identifies what's most commonly thrown away\n• An e-waste collection point with an AI sorter that identifies device condition and tells you whether it can be donated or recycled\n• A 'project material exchange' system where AI matches leftover craft/science materials from one team to another team that needs them\n\nSell it as a subscription/service to:\n• Schools (sustainability reporting)\n• Municipal recycling programs & NGOs\n• Corporate CSR programs"
+      }
+    ]
+  },
   scene5: {
     title: "Your Secret Superpowers",
     subtitle: "Smart Innovators Use Smart Tools (AI Tools)",

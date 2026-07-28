@@ -15,11 +15,12 @@ import Scene9 from "@/components/scenes/Scene9";
 import Scene10 from "@/components/scenes/Scene10";
 import Scene11 from "@/components/scenes/Scene11";
 import SceneGuidelines from "@/components/scenes/SceneGuidelines";
+import SceneJuniorProblems from "@/components/scenes/SceneJuniorProblems";
 import SceneVideo from "@/components/scenes/SceneVideo";
 import { Canvas } from "@react-three/fiber";
 import { Trophy, Maximize, Minimize } from "lucide-react";
 
-const TOTAL_SCENES = 13;
+const TOTAL_SCENES = 14;
 
 export default function Presentation() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -48,7 +49,7 @@ export default function Presentation() {
     const handleWheel = (e: WheelEvent) => {
       if (isScrolling.current) return;
       // Block wheel navigation on the video slide to prevent unmounting the video
-      if (activeScene === 7) return;
+      if (activeScene === 8) return;
 
       isScrolling.current = true;
       if (e.deltaY > 50) {
@@ -70,7 +71,7 @@ export default function Presentation() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Block ALL navigation on the video slide — only the video controls should work
-      if (activeScene === 7) return;
+      if (activeScene === 8) return;
       
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
         nextAction();
@@ -99,15 +100,16 @@ export default function Presentation() {
       case 1: return <Scene2 key="scene2" />;
       case 2: return <Scene3 key="scene3" />;
       case 3: return <Scene4 key="scene4" />;
-      case 4: return <SceneGuidelines key="sceneGuidelines" />;
-      case 5: return <Scene5 key="scene5" />;
-      case 6: return <Scene6 key="scene6" />;
-      case 7: return <SceneVideo key="sceneVideo" />;
-      case 8: return <Scene7 key="scene7" />;
-      case 9: return <Scene8 key="scene8" />;
-      case 10: return <Scene9 key="scene9" />;
-      case 11: return <Scene10 key="scene10" />;
-      case 12: return <Scene11 key="scene11" />;
+      case 4: return <SceneJuniorProblems key="sceneJuniorProblems" />;
+      case 5: return <SceneGuidelines key="sceneGuidelines" />;
+      case 6: return <Scene5 key="scene5" />;
+      case 7: return <Scene6 key="scene6" />;
+      case 8: return <SceneVideo key="sceneVideo" />;
+      case 9: return <Scene7 key="scene7" />;
+      case 10: return <Scene8 key="scene8" />;
+      case 11: return <Scene9 key="scene9" />;
+      case 12: return <Scene10 key="scene10" />;
+      case 13: return <Scene11 key="scene11" />;
       default: return null;
     }
   };
