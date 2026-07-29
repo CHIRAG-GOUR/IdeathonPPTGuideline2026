@@ -17,7 +17,7 @@ import Scene11 from "@/components/scenes/Scene11";
 import SceneGuidelines from "@/components/scenes/SceneGuidelines";
 import SceneJuniorProblems from "@/components/scenes/SceneJuniorProblems";
 import SceneVideo from "@/components/scenes/SceneVideo";
-import { Trophy, Maximize, Minimize, RotateCw } from "lucide-react";
+import { Trophy, Maximize, Minimize, RotateCw, ChevronLeft, ChevronRight, Smartphone } from "lucide-react";
 
 const TOTAL_SCENES = 14;
 const STAGE_WIDTH = 1440;
@@ -29,7 +29,7 @@ export default function Presentation() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [stageScale, setStageScale] = useState(1);
   const [isPortraitMobile, setIsPortraitMobile] = useState(false);
-  
+
   const isScrolling = useRef(false);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
@@ -80,6 +80,28 @@ export default function Presentation() {
     }
   }, [activeScene]);
 
+  // Combined Landscape + Fullscreen Mode
+  const toggleLandscapeFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen().catch(() => {});
+        setIsFullscreen(true);
+        if (typeof window !== "undefined" && screen.orientation && "lock" in screen.orientation) {
+          // @ts-expect-error lock method exists in standard ScreenOrientation
+          await screen.orientation.lock("landscape").catch(() => {});
+        }
+      } else {
+        if (typeof window !== "undefined" && screen.orientation && "unlock" in screen.orientation) {
+          screen.orientation.unlock();
+        }
+        await document.exitFullscreen().catch(() => {});
+        setIsFullscreen(false);
+      }
+    } catch (err) {
+      console.log("Landscape Fullscreen toggle error:", err);
+    }
+  };
+
   // Handle Wheel Events
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -106,7 +128,7 @@ export default function Presentation() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (activeScene === 8) return;
-      
+
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
         nextAction();
       } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
@@ -142,16 +164,6 @@ export default function Presentation() {
     touchStartY.current = null;
   };
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => console.log(err));
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
-    }
-  };
-
   const renderScene = () => {
     switch (activeScene) {
       case 0: return <Scene1 key="scene1" />;
@@ -173,7 +185,7 @@ export default function Presentation() {
   };
 
   return (
-    <main 
+    <main
       className="relative w-screen h-screen overflow-hidden bg-[#FFFDF7] flex items-center justify-center font-sans select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -181,11 +193,53 @@ export default function Presentation() {
       {/* Global Background */}
       <AnimatedBackground />
 
-      {/* Mobile Portrait Mode Rotation Guidance Prompt */}
+      {/* Extreme Left & Right Navigation Arrow Buttons (Positioned on main viewport so they NEVER overlap PPT data) */}
+      {hasStarted && (
+        <>
+          <button
+            onClick={prevAction}
+            disabled={activeScene === 0}
+            aria-label="Previous Slide"
+            className={`absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 md:w-14 md:h-14 rounded-full bg-white/90 hover:bg-blue-600 text-gray-700 hover:text-white shadow-xl border border-gray-200/80 backdrop-blur-md flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer ${
+              activeScene === 0 ? "opacity-30 cursor-not-allowed hover:bg-white/90 hover:text-gray-700" : "hover:scale-105"
+            }`}
+          >
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" strokeWidth={2.5} />
+          </button>
+
+          <button
+            onClick={nextAction}
+            disabled={activeScene === TOTAL_SCENES - 1}
+            aria-label="Next Slide"
+            className={`absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 md:w-14 md:h-14 rounded-full bg-white/90 hover:bg-blue-600 text-gray-700 hover:text-white shadow-xl border border-gray-200/80 backdrop-blur-md flex items-center justify-center transition-all duration-200 active:scale-90 cursor-pointer ${
+              activeScene === TOTAL_SCENES - 1 ? "opacity-30 cursor-not-allowed hover:bg-white/90 hover:text-gray-700" : "hover:scale-105"
+            }`}
+          >
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" strokeWidth={2.5} />
+          </button>
+        </>
+      )}
+
+      {/* Top Left: Combined Landscape + Fullscreen Toggle Button */}
+      <button
+        onClick={toggleLandscapeFullscreen}
+        aria-label="Toggle Landscape & Fullscreen"
+        className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center gap-2 px-3.5 py-2 md:px-5 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs md:text-sm rounded-full shadow-lg border border-blue-400/40 transition-all duration-300 active:scale-95 group cursor-pointer"
+      >
+        <Smartphone size={16} className="group-hover:rotate-90 transition-transform duration-300" />
+        <Maximize size={16} />
+        <span className="hidden sm:inline">Landscape & Fullscreen</span>
+        <span className="sm:hidden">Full Landscape</span>
+      </button>
+
+      {/* Mobile Portrait Mode Rotation Guidance Prompt with 1-Tap Auto-Rotate */}
       {isPortraitMobile && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-lg border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse pointer-events-none">
+        <div
+          onClick={toggleLandscapeFullscreen}
+          className="absolute top-16 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-lg border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse cursor-pointer hover:bg-blue-700 transition-colors"
+        >
           <RotateCw size={16} className="animate-spin" />
-          <span>Rotate phone to Landscape mode 📱 for full screen</span>
+          <span>Tap to enter Landscape & Fullscreen 📱</span>
         </div>
       )}
 
@@ -241,7 +295,7 @@ export default function Presentation() {
             <AnimatePresence mode="wait">{renderScene()}</AnimatePresence>
 
             {/* Slide Navigation Indicators */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 bg-white/90 shadow-md border border-gray-200 px-2.5 py-4 rounded-full">
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-2 bg-white/90 shadow-md border border-gray-200 px-2.5 py-4 rounded-full">
               {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
                 <button
                   key={idx}
@@ -255,9 +309,9 @@ export default function Presentation() {
               ))}
             </div>
 
-            {/* Fullscreen Toggle Button */}
+            {/* Top Right Fullscreen Toggle Button */}
             <button
-              onClick={toggleFullscreen}
+              onClick={toggleLandscapeFullscreen}
               className="absolute top-6 right-6 z-50 p-3 bg-white hover:bg-gray-50 border border-gray-200 shadow-sm text-gray-600 hover:text-blue-600 rounded-full transition-all duration-300"
             >
               {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
@@ -268,4 +322,5 @@ export default function Presentation() {
     </main>
   );
 }
+
 
