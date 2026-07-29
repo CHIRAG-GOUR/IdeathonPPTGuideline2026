@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Play, Pause, Volume2, VolumeX, Type, Maximize, Minimize } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Type, Maximize, Minimize, ExternalLink } from "lucide-react";
 
 interface Cue {
   start: number;
@@ -375,6 +375,22 @@ export default function SceneVideo() {
             </div>
           </div>
         </motion.div>
+
+        {/* Redirect Button to Student Portal */}
+        <motion.a
+          href="https://skillizee.io/ccws/student"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-6 inline-flex items-center gap-3 px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-blue-500/30 border border-blue-400/30 transition-all duration-300 group cursor-pointer z-30"
+        >
+          <span>Submit to Student Portal</span>
+          <ExternalLink size={22} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform duration-200" />
+        </motion.a>
       </div>
     </SceneWrapper>
   );

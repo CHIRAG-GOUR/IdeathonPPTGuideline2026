@@ -79,7 +79,7 @@ export default function SceneJuniorProblems() {
   return (
     <SceneWrapper>
       <div className="w-full h-full flex flex-col p-3 md:p-6 max-w-7xl mx-auto overflow-hidden">
-        
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -96,9 +96,9 @@ export default function SceneJuniorProblems() {
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden max-w-5xl mx-auto w-full">
-          
+
           {/* Main Content Card */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
@@ -110,11 +110,10 @@ export default function SceneJuniorProblems() {
                 <button
                   key={problem.id}
                   onClick={() => setActiveTab(i)}
-                  className={`flex-1 flex items-center justify-center p-3 gap-2 transition-all border-b-2 ${
-                    activeTab === i 
-                      ? 'bg-white border-blue-600 text-blue-600 shadow-[inset_0_-2px_0_0_#2563eb]' 
+                  className={`flex-1 flex items-center justify-center p-3 gap-2 transition-all border-b-2 ${activeTab === i
+                      ? 'bg-white border-blue-600 text-blue-600 shadow-[inset_0_-2px_0_0_#2563eb]'
                       : 'border-transparent text-gray-500 hover:bg-gray-100'
-                  }`}
+                    }`}
                 >
                   <div className={activeTab === i ? 'text-blue-600' : 'text-gray-400'}>
                     {icons[i]}
@@ -137,9 +136,9 @@ export default function SceneJuniorProblems() {
                 >
                   {/* Generated Image for the idea */}
                   <div className="w-full md:w-[35%] bg-gray-100 border border-gray-200 rounded-xl overflow-hidden shrink-0 shadow-sm relative group min-h-[200px]">
-                    <img 
-                      src={images[activeTab]} 
-                      alt={data.problems[activeTab].title} 
+                    <img
+                      src={images[activeTab]}
+                      alt={data.problems[activeTab].title}
                       className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     />
                   </div>
@@ -151,14 +150,14 @@ export default function SceneJuniorProblems() {
                         {data.problems[activeTab].problem}
                       </p>
                     </div>
-                    
+
                     <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 shadow-sm">
                       <h5 className="text-[11px] font-black uppercase text-blue-600 mb-1 tracking-wider">Your Challenge</h5>
                       <p className="text-xs md:text-sm font-bold text-blue-900 leading-snug">
                         {data.problems[activeTab].challenge}
                       </p>
                     </div>
-                    
+
                     {(data.problems[activeTab] as any).business && (
                       <div className="bg-emerald-50 p-3 border-l-4 border-emerald-500 rounded-r-xl shadow-sm">
                         <h5 className="text-[11px] font-black uppercase text-emerald-700 mb-1 tracking-wider">Business Idea</h5>
