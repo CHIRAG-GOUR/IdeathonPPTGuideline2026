@@ -174,7 +174,7 @@ export default function Presentation() {
 
   return (
     <main 
-      className="relative w-screen h-screen overflow-hidden bg-gray-950 flex items-center justify-center font-sans select-none"
+      className="relative w-screen h-screen overflow-hidden bg-[#FFFDF7] flex items-center justify-center font-sans select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -183,7 +183,7 @@ export default function Presentation() {
 
       {/* Mobile Portrait Mode Rotation Guidance Prompt */}
       {isPortraitMobile && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-2xl border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse pointer-events-none">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-lg border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse pointer-events-none">
           <RotateCw size={16} className="animate-spin" />
           <span>Rotate phone to Landscape mode 📱 for full screen</span>
         </div>
@@ -191,7 +191,7 @@ export default function Presentation() {
 
       {/* Stage Scaler Container - Enforces Laptop 16:9 Presentation Format Everywhere */}
       <div
-        className="relative shrink-0 flex items-center justify-center z-10 transition-transform duration-150 ease-out overflow-hidden shadow-2xl rounded-lg"
+        className="relative shrink-0 flex items-center justify-center z-10 transition-transform duration-150 ease-out overflow-hidden"
         style={{
           width: `${STAGE_WIDTH}px`,
           height: `${STAGE_HEIGHT}px`,
