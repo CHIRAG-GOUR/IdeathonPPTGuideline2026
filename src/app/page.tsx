@@ -17,16 +17,52 @@ import Scene11 from "@/components/scenes/Scene11";
 import SceneGuidelines from "@/components/scenes/SceneGuidelines";
 import SceneJuniorProblems from "@/components/scenes/SceneJuniorProblems";
 import SceneVideo from "@/components/scenes/SceneVideo";
-import { Canvas } from "@react-three/fiber";
-import { Trophy, Maximize, Minimize } from "lucide-react";
+import { Trophy, Maximize, Minimize, RotateCw } from "lucide-react";
 
 const TOTAL_SCENES = 14;
+const STAGE_WIDTH = 1440;
+const STAGE_HEIGHT = 810;
 
 export default function Presentation() {
   const [hasStarted, setHasStarted] = useState(false);
   const [activeScene, setActiveScene] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [stageScale, setStageScale] = useState(1);
+  const [isPortraitMobile, setIsPortraitMobile] = useState(false);
+  
   const isScrolling = useRef(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  // Responsive stage scaling logic
+  useEffect(() => {
+    const updateDimensions = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Fit stage 100% within viewport while preserving 16:9 laptop layout
+      const scaleX = vw / STAGE_WIDTH;
+      const scaleY = vh / STAGE_HEIGHT;
+      const computedScale = Math.min(scaleX, scaleY);
+
+      setStageScale(computedScale);
+
+      // Check if held in portrait mode on mobile screen
+      if (vw < 768 && vh > vw) {
+        setIsPortraitMobile(true);
+      } else {
+        setIsPortraitMobile(false);
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    window.addEventListener("orientationchange", updateDimensions);
+    return () => {
+      window.removeEventListener("resize", updateDimensions);
+      window.removeEventListener("orientationchange", updateDimensions);
+    };
+  }, []);
 
   const handleStart = () => {
     setHasStarted(true);
@@ -48,7 +84,6 @@ export default function Presentation() {
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if (isScrolling.current) return;
-      // Block wheel navigation on the video slide to prevent unmounting the video
       if (activeScene === 8) return;
 
       isScrolling.current = true;
@@ -65,12 +100,11 @@ export default function Presentation() {
 
     window.addEventListener("wheel", handleWheel);
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [nextAction, prevAction]);
+  }, [activeScene, nextAction, prevAction]);
 
   // Handle Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Block ALL navigation on the video slide — only the video controls should work
       if (activeScene === 8) return;
       
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
@@ -82,11 +116,35 @@ export default function Presentation() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [nextAction, prevAction]);
+  }, [activeScene, nextAction, prevAction]);
+
+  // Handle Touch Swipe Events for Mobile Navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+    // Horizontal swipe threshold (50px)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (activeScene === 8) return; // Block swipe on video slide
+      if (deltaX < 0) {
+        nextAction();
+      } else {
+        prevAction();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => console.log(err));
+      document.documentElement.requestFullscreen().catch((err) => console.log(err));
       setIsFullscreen(true);
     } else {
       document.exitFullscreen();
@@ -115,81 +173,99 @@ export default function Presentation() {
   };
 
   return (
-    <>
+    <main 
+      className="relative w-screen h-screen overflow-hidden bg-gray-950 flex items-center justify-center font-sans select-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Global Background */}
+      <AnimatedBackground />
 
-      {!hasStarted ? (
-        <main
-          className="relative w-full h-screen flex items-center justify-center cursor-pointer overflow-hidden"
-          onClick={handleStart}
-        >
-          {/* Flowing background visible on start screen */}
-          <AnimatedBackground />
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="relative z-10 flex flex-col items-center text-center px-6"
-          >
-            {/* Trophy icon */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="mb-8 drop-shadow-sm text-yellow-500"
-            >
-              <Trophy size={80} strokeWidth={1.5} />
-            </motion.div>
-
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight mb-4 leading-tight text-gray-900" style={{ WebkitTextStroke: '2px #111111', color: 'transparent' }}>
-              SkilliZee Ideathon 2026
-            </h1>
-            <h2 className="text-xl md:text-3xl font-bold uppercase tracking-[0.15em] text-gray-600 mb-10">
-              PPT Guidelines
-            </h2>
-
-            <div className="bg-white border border-gray-200 px-8 py-4 rounded-full shadow-md">
-              <span className="text-sm md:text-base text-gray-600 uppercase tracking-[0.2em] font-bold animate-pulse">
-                Click anywhere to begin
-              </span>
-            </div>
-          </motion.div>
-        </main>
-      ) : (
-        <main className="relative w-full h-screen overflow-hidden font-sans">
-          {/* Animated flowing background behind everything */}
-          <AnimatedBackground />
-
-          {/* Scene content */}
-          <div className="relative z-10 w-full h-full">
-            <AnimatePresence mode="wait">
-              {renderScene()}
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation Indicators */}
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 bg-white/90 shadow-md border border-gray-200 px-2 py-4 rounded-full">
-            {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveScene(idx)}
-                className={`w-3 rounded-full transition-all duration-300 ${
-                  idx === activeScene
-                    ? "bg-blue-600 h-8 shadow-sm"
-                    : "bg-gray-300 h-3 hover:bg-blue-400"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Fullscreen Toggle */}
-          <button
-            onClick={toggleFullscreen}
-            className="absolute top-6 right-6 z-50 p-3 bg-white hover:bg-gray-50 border border-gray-200 shadow-sm text-gray-600 hover:text-blue-600 rounded-full transition-all duration-300"
-          >
-            {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
-          </button>
-        </main>
+      {/* Mobile Portrait Mode Rotation Guidance Prompt */}
+      {isPortraitMobile && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-2xl border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse pointer-events-none">
+          <RotateCw size={16} className="animate-spin" />
+          <span>Rotate phone to Landscape mode 📱 for full screen</span>
+        </div>
       )}
-    </>
+
+      {/* Stage Scaler Container - Enforces Laptop 16:9 Presentation Format Everywhere */}
+      <div
+        className="relative shrink-0 flex items-center justify-center z-10 transition-transform duration-150 ease-out overflow-hidden shadow-2xl rounded-lg"
+        style={{
+          width: `${STAGE_WIDTH}px`,
+          height: `${STAGE_HEIGHT}px`,
+          transform: `scale(${stageScale})`,
+          transformOrigin: "center center",
+        }}
+      >
+        {!hasStarted ? (
+          <div
+            className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
+            onClick={handleStart}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="relative z-10 flex flex-col items-center text-center px-6"
+            >
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="mb-8 drop-shadow-sm text-yellow-500"
+              >
+                <Trophy size={80} strokeWidth={1.5} />
+              </motion.div>
+
+              <h1
+                className="text-6xl lg:text-7xl font-black uppercase tracking-tight mb-4 leading-tight text-gray-900"
+                style={{ WebkitTextStroke: "2px #111111", color: "transparent" }}
+              >
+                SkilliZee Ideathon 2026
+              </h1>
+              <h2 className="text-3xl font-bold uppercase tracking-[0.15em] text-gray-600 mb-10">
+                PPT Guidelines
+              </h2>
+
+              <div className="bg-white border border-gray-200 px-8 py-4 rounded-full shadow-md">
+                <span className="text-base text-gray-600 uppercase tracking-[0.2em] font-bold animate-pulse">
+                  Click anywhere to begin
+                </span>
+              </div>
+            </motion.div>
+          </div>
+        ) : (
+          <div className="relative w-full h-full">
+            {/* Scene Content */}
+            <AnimatePresence mode="wait">{renderScene()}</AnimatePresence>
+
+            {/* Slide Navigation Indicators */}
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 bg-white/90 shadow-md border border-gray-200 px-2.5 py-4 rounded-full">
+              {Array.from({ length: TOTAL_SCENES }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveScene(idx)}
+                  className={`w-3.5 rounded-full transition-all duration-300 ${
+                    idx === activeScene
+                      ? "bg-blue-600 h-8 shadow-sm"
+                      : "bg-gray-300 h-3.5 hover:bg-blue-400"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Fullscreen Toggle Button */}
+            <button
+              onClick={toggleFullscreen}
+              className="absolute top-6 right-6 z-50 p-3 bg-white hover:bg-gray-50 border border-gray-200 shadow-sm text-gray-600 hover:text-blue-600 rounded-full transition-all duration-300"
+            >
+              {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+            </button>
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
+

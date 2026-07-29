@@ -61,7 +61,7 @@ export default function Scene9() {
           className="w-full flex flex-col gap-4 relative"
         >
           {/* Vertical timeline line - animates drawing down */}
-          <div className="hidden md:block absolute left-24 top-4 bottom-4 w-1 bg-gray-200/30 z-0 rounded-full overflow-hidden">
+          <div className="block absolute left-24 top-4 bottom-4 w-1 bg-gray-200/30 z-0 rounded-full overflow-hidden">
             <motion.div 
               initial={{ height: 0 }}
               animate={{ height: "100%" }}
@@ -74,15 +74,14 @@ export default function Scene9() {
             <motion.div 
               key={i} 
               variants={item} 
-              className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10 w-full group"
+              className="flex flex-row items-center gap-6 relative z-10 w-full group"
             >
               {/* Week indicator */}
-              <div className="w-20 md:w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-1">
-                <div className="bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm w-full text-center md:text-right border border-blue-600 transition-all duration-300">
+              <div className="w-48 shrink-0 flex justify-end transform transition-transform group-hover:-translate-x-1">
+                <div className="bg-blue-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm w-full text-right border border-blue-600 transition-all duration-300">
                   {date.week}
                 </div>
               </div>
-              {/* Removed Timeline dot as per request */}
 
               {/* Event card */}
               <div className="flex-1 bg-white p-5 rounded-xl border-l-4 border-blue-500 w-full shadow-sm group-hover:shadow-md transition-all duration-300 relative overflow-hidden">

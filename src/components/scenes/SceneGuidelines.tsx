@@ -76,14 +76,14 @@ export default function SceneGuidelines() {
         </motion.div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
+        <div className="flex-1 flex flex-row gap-6 overflow-hidden">
           
           {/* Left Column: Rules & Checklist */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="w-full lg:w-1/3 flex flex-col gap-4 overflow-y-auto pr-2"
+            className="w-1/3 flex flex-col gap-4 overflow-y-auto pr-2"
           >
             <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl shadow-sm shrink-0">
               <p className="text-sm font-bold text-blue-900 leading-relaxed">
@@ -121,7 +121,7 @@ export default function SceneGuidelines() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="w-full lg:w-2/3 flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden"
+            className="w-2/3 flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden"
           >
             {/* Tabs */}
             <div className="flex w-full overflow-x-auto border-b border-gray-200 bg-gray-50 shrink-0" style={{ scrollbarWidth: 'none' }}>

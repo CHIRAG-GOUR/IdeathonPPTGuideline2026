@@ -75,7 +75,7 @@ export default function Scene5() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="w-full grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="w-full grid grid-cols-3 gap-4"
           >
             {/* PPT Tools */}
             <motion.div variants={item} className="bg-white/90 p-3 lg:p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col hover:shadow-md transition-all duration-300">

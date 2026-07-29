@@ -95,7 +95,7 @@ export default function SceneJuniorProblems() {
         </motion.div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden max-w-5xl mx-auto w-full">
+        <div className="flex-1 flex flex-row gap-4 overflow-hidden max-w-5xl mx-auto w-full">
 
           {/* Main Content Card */}
           <motion.div
@@ -118,13 +118,13 @@ export default function SceneJuniorProblems() {
                   <div className={activeTab === i ? 'text-blue-600' : 'text-gray-400'}>
                     {icons[i]}
                   </div>
-                  <span className="text-xs md:text-sm uppercase font-bold tracking-wider">{problem.title}</span>
+                  <span className="text-sm uppercase font-bold tracking-wider">{problem.title}</span>
                 </button>
               ))}
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 p-3 md:p-5 overflow-hidden relative flex flex-col">
+            <div className="flex-1 p-5 overflow-hidden relative flex flex-col">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -132,10 +132,10 @@ export default function SceneJuniorProblems() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="flex flex-col md:flex-row gap-4 h-full items-stretch"
+                  className="flex flex-row gap-4 h-full items-stretch"
                 >
                   {/* Generated Image for the idea */}
-                  <div className="w-full md:w-[35%] bg-gray-100 border border-gray-200 rounded-xl overflow-hidden shrink-0 shadow-sm relative group min-h-[200px]">
+                  <div className="w-[35%] bg-gray-100 border border-gray-200 rounded-xl overflow-hidden shrink-0 shadow-sm relative group min-h-[200px]">
                     <img
                       src={images[activeTab]}
                       alt={data.problems[activeTab].title}
@@ -143,7 +143,7 @@ export default function SceneJuniorProblems() {
                     />
                   </div>
 
-                  <div className="w-full md:w-[65%] flex flex-col gap-3 pb-1 h-full overflow-y-auto pr-2" style={{ scrollbarWidth: 'none' }}>
+                  <div className="w-[65%] flex flex-col gap-3 pb-1 h-full overflow-y-auto pr-2" style={{ scrollbarWidth: 'none' }}>
                     <div>
                       <h5 className="text-[11px] font-black uppercase text-red-500 mb-1 tracking-wider">Real Problem</h5>
                       <p className="text-xs md:text-sm font-semibold text-gray-700 leading-snug whitespace-pre-line">

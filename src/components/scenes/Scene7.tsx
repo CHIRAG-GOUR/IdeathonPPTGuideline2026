@@ -53,16 +53,16 @@ export default function Scene7() {
         </motion.div>
 
         {/* Two Cards Row */}
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 w-full items-stretch justify-center max-w-6xl shrink-0">
+        <div className="flex flex-row gap-8 w-full items-stretch justify-center max-w-6xl shrink-0">
           
           {/* Left Card: Flow */}
           <motion.div 
             variants={container}
             initial="hidden"
             animate="show"
-            className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-gray-300 shadow-xl flex flex-col gap-6 w-full md:w-1/3 justify-center"
+            className="bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-md p-6 rounded-3xl border border-gray-300 shadow-xl flex flex-col gap-6 w-1/3 justify-center"
           >
-            <h4 className="text-base md:text-lg font-black text-blue-800 uppercase tracking-widest mb-2 border-b-2 border-blue-200 pb-3 text-center drop-shadow-sm">The Flow</h4>
+            <h4 className="text-lg font-black text-blue-800 uppercase tracking-widest mb-2 border-b-2 border-blue-200 pb-3 text-center drop-shadow-sm">The Flow</h4>
             <div className="flex flex-col gap-4">
               {ideathonData.scene7.flow.map((step, i) => (
                 <motion.div 
@@ -71,10 +71,10 @@ export default function Scene7() {
                   className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden"
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500 group-hover:w-2 transition-all"></div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 rounded-full font-black flex items-center justify-center shrink-0 text-base md:text-lg border-2 border-white shadow-sm ring-1 ring-blue-100">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 rounded-full font-black flex items-center justify-center shrink-0 text-lg border-2 border-white shadow-sm ring-1 ring-blue-100">
                     {i + 1}
                   </div>
-                  <span className="text-sm md:text-base font-bold text-gray-800 leading-tight">{step}</span>
+                  <span className="text-base font-bold text-gray-800 leading-tight">{step}</span>
                 </motion.div>
               ))}
             </div>
@@ -85,13 +85,13 @@ export default function Scene7() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="bg-gradient-to-br from-blue-600 to-blue-900 p-6 md:p-8 rounded-3xl border border-blue-500 shadow-xl flex flex-col w-full md:w-2/3 justify-center relative overflow-hidden"
+            className="bg-gradient-to-br from-blue-600 to-blue-900 p-6 rounded-3xl border border-blue-500 shadow-xl flex flex-col w-2/3 justify-center relative overflow-hidden"
           >
             {/* Glossy overlay effect */}
             <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
             
-            <h4 className="text-base md:text-lg font-black text-yellow-400 uppercase tracking-widest mb-4 border-b-2 border-blue-500/50 pb-3 text-center drop-shadow-md relative z-10">Presentation Must Include</h4>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+            <h4 className="text-lg font-black text-yellow-400 uppercase tracking-widest mb-4 border-b-2 border-blue-500/50 pb-3 text-center drop-shadow-md relative z-10">Presentation Must Include</h4>
+            <ul className="grid grid-cols-2 gap-4 relative z-10">
               {ideathonData.scene7.presentationIncludes.map((req, i) => (
                 <motion.li key={i} variants={item} className="flex items-center gap-4 bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 shadow-lg hover:bg-white/20 transition-all group cursor-default">
                   <div className="bg-yellow-400 p-2 rounded-xl shrink-0 text-blue-900 shadow-inner group-hover:scale-110 transition-transform">

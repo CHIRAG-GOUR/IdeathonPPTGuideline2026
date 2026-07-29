@@ -44,7 +44,7 @@ export default function Scene6() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full"
+          className="grid grid-cols-3 gap-6 w-full"
         >
           {ideathonData.scene6.weeks.map((week, i) => (
             <motion.div 

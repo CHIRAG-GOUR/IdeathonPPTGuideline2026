@@ -57,9 +57,9 @@ export default function Scene4() {
         </motion.div>
 
         {/* Circular Layout Container */}
-        <div className="flex-1 w-full flex items-center justify-center mt-6 md:mt-10">
-          {/* This 0x0 div acts as our absolute center point. We use CSS scale for perfect responsiveness! */}
-          <div className="relative w-0 h-0 scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-[0.95] xl:scale-100">
+        <div className="flex-1 w-full flex items-center justify-center mt-10">
+          {/* This 0x0 div acts as our absolute center point. Perfect 1:1 desktop scale! */}
+          <div className="relative w-0 h-0 scale-[0.95]">
 
             {/* Central Hub */}
             <motion.div
