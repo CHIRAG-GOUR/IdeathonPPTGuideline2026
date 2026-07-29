@@ -220,25 +220,22 @@ export default function Presentation() {
         </>
       )}
 
-      {/* Top Left: Combined Landscape + Fullscreen Toggle Button */}
+      {/* Top Left: Rotate & Fullscreen Icon Button (White Circle, Icon-Only) */}
       <button
         onClick={toggleLandscapeFullscreen}
-        aria-label="Toggle Landscape & Fullscreen"
-        className="absolute top-4 left-4 md:top-6 md:left-6 z-50 flex items-center gap-2 px-3.5 py-2 md:px-5 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs md:text-sm rounded-full shadow-lg border border-blue-400/40 transition-all duration-300 active:scale-95 group cursor-pointer"
+        aria-label="Rotate to Landscape & Fullscreen"
+        className="absolute top-4 left-4 md:top-6 md:left-6 z-50 p-3 bg-white hover:bg-gray-50 border border-gray-200 shadow-sm text-gray-600 hover:text-blue-600 rounded-full transition-all duration-300 group cursor-pointer active:scale-95 flex items-center justify-center"
       >
-        <Smartphone size={16} className="group-hover:rotate-90 transition-transform duration-300" />
-        <Maximize size={16} />
-        <span className="hidden sm:inline">Landscape & Fullscreen</span>
-        <span className="sm:hidden">Full Landscape</span>
+        <RotateCw size={20} className="group-hover:rotate-90 transition-transform duration-300" />
       </button>
 
       {/* Mobile Portrait Mode Rotation Guidance Prompt with 1-Tap Auto-Rotate */}
       {isPortraitMobile && (
         <div
           onClick={toggleLandscapeFullscreen}
-          className="absolute top-16 left-1/2 -translate-x-1/2 z-50 bg-blue-600/95 text-white backdrop-blur-md px-5 py-2.5 rounded-full shadow-lg border border-blue-300/40 flex items-center gap-2.5 text-xs font-bold animate-pulse cursor-pointer hover:bg-blue-700 transition-colors"
+          className="absolute top-16 left-1/2 -translate-x-1/2 z-50 bg-white/95 text-blue-700 backdrop-blur-md px-5 py-2 rounded-full shadow-md border border-blue-200 flex items-center gap-2 text-xs font-bold animate-pulse cursor-pointer hover:bg-white transition-colors"
         >
-          <RotateCw size={16} className="animate-spin" />
+          <RotateCw size={16} className="animate-spin text-blue-600" />
           <span>Tap to enter Landscape & Fullscreen 📱</span>
         </div>
       )}
