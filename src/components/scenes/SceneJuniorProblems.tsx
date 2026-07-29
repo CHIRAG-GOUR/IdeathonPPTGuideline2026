@@ -158,11 +158,11 @@ export default function SceneJuniorProblems() {
                       </p>
                     </div>
 
-                    {(data.problems[activeTab] as Record<string, string | undefined>).business && (
+                    {'business' in data.problems[activeTab] && data.problems[activeTab].business && (
                       <div className="bg-emerald-50 p-3 border-l-4 border-emerald-500 rounded-r-xl shadow-sm">
                         <h5 className="text-[11px] font-black uppercase text-emerald-700 mb-1 tracking-wider">Business Idea</h5>
                         <p className="text-xs font-semibold text-emerald-900 leading-snug whitespace-pre-line">
-                          {(data.problems[activeTab] as Record<string, string | undefined>).business}
+                          {data.problems[activeTab].business}
                         </p>
                       </div>
                     )}
