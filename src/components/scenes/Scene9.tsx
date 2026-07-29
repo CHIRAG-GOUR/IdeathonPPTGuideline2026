@@ -28,11 +28,6 @@ export default function Scene9() {
     }
   };
 
-  const dotVariant = {
-    hidden: { scale: 0, opacity: 0 },
-    show: { scale: 1, opacity: 1, transition: { type: "spring" as const, bounce: 0.6 } }
-  };
-
   return (
     <SceneWrapper>
       <div className="w-full h-full flex flex-col items-center justify-center p-4 md:p-8 max-w-5xl mx-auto">

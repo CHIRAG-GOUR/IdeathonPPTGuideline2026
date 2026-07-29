@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SceneWrapper from "../SceneWrapper";
 import { ideathonData } from "@/content/ideathon-data";
-import { CheckCircle, Brain, HeartPulse, ShieldAlert, Store, Rocket, Image as ImageIcon, Users } from "lucide-react";
+import { CheckCircle, Brain, HeartPulse, ShieldAlert, Store, Rocket, Users } from "lucide-react";
 
 export default function SceneGuidelines() {
   const [activeTab, setActiveTab] = useState(0);
@@ -178,20 +178,20 @@ export default function SceneGuidelines() {
                       </p>
                     </div>
 
-                    {(data.genres[activeTab] as any).tip && (
+                    {(data.genres[activeTab] as Record<string, string | undefined>).tip && (
                       <div className="bg-amber-50 p-2 border-l-4 border-amber-400 rounded-r-md">
                         <h5 className="text-[10px] font-black uppercase text-amber-600 mb-0.5 tracking-wider">Tip</h5>
                         <p className="text-xs font-semibold text-amber-900">
-                          {(data.genres[activeTab] as any).tip}
+                          {(data.genres[activeTab] as Record<string, string | undefined>).tip}
                         </p>
                       </div>
                     )}
                     
-                    {(data.genres[activeTab] as any).business && (
+                    {(data.genres[activeTab] as Record<string, string | undefined>).business && (
                       <div className="bg-emerald-50 p-2 border-l-4 border-emerald-500 rounded-r-md">
                         <h5 className="text-[10px] font-black uppercase text-emerald-700 mb-0.5 tracking-wider">Business Idea</h5>
                         <p className="text-xs font-semibold text-emerald-900">
-                          {(data.genres[activeTab] as any).business}
+                          {(data.genres[activeTab] as Record<string, string | undefined>).business}
                         </p>
                       </div>
                     )}
