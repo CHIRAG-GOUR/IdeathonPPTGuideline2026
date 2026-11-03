@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ImageIcon } from "lucide-react";
 
 /**
- * Shows an image from /public. If the file doesn't exist yet, it shows a
- * dashed placeholder with the expected file name, so the deck still looks
- * finished while images are being generated.
+ * Shows an image from /public. If the file is missing, it quietly falls back
+ * to a soft brand-blue gradient: no placeholder text is ever shown on a slide.
  */
 export default function ImageSlot({
   src,
@@ -20,17 +18,14 @@ export default function ImageSlot({
   fit?: "cover" | "contain";
 }) {
   const [failed, setFailed] = useState(false);
-  const fileName = src.split("/").pop();
 
   if (failed) {
     return (
       <div
-        className={`w-full h-full flex flex-col items-center justify-center gap-2 bg-blue-50/70 border-2 border-dashed border-blue-300 text-blue-500 text-center p-3 ${className}`}
-      >
-        <ImageIcon size={32} strokeWidth={1.5} />
-        <span className="text-xs font-bold uppercase tracking-wider">{alt}</span>
-        <span className="text-[10px] font-mono text-blue-400">{fileName}</span>
-      </div>
+        role="img"
+        aria-label={alt}
+        className={`w-full h-full bg-gradient-to-br from-blue-100 via-blue-50 to-amber-50 ${className}`}
+      />
     );
   }
 

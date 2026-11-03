@@ -21,7 +21,12 @@ export const level2Data = {
     description:
       "An Ideathon is a platform where young minds identify real-world problems and transform their ideas into innovative solutions.",
     steps: ["Identify a problem.", "Brainstorm solutions.", "Build and innovate.", "Present your idea to the world."],
-    image: `${IMG}/s02_ideathon.png`,
+    journeyTitle: "Your Ideathon Journey",
+    journey: [
+      { level: "Level 1", name: "Class Competition", status: "cleared" },
+      { level: "Level 2", name: "Build. Brand. Pitch.", status: "current" },
+      { level: "Level 3", name: "Interschool Grand Finale", status: "next" },
+    ],
     poweredBy: "Powered by SkilliZee",
     founder: "Dr. Aarna Singh Rawat",
     founderImage: `${IMG}/s02_founder.jpg`,
@@ -37,7 +42,9 @@ export const level2Data = {
     title: "Congratulations, Young Innovators!",
     text: "You have successfully cleared Level 1 and earned your place in Ideathon Level 2!",
     highlight: "Your journey from having an idea to creating an impactful solution starts now.",
-    image: `${IMG}/s03_winners.png`,
+    stamp: "Level 1 Cleared",
+    stat: "1 team per class",
+    statNote: "made it to Level 2. That's you!",
   },
 
   rules: {
@@ -168,8 +175,13 @@ export const level2Data = {
       { title: "Entrepreneurial Exposure", desc: "Masterclasses with real entrepreneurs." },
       { title: "Make It Real", desc: "A chance to turn your ideas into reality — with funding from SkilliZee." },
     ],
-    bigPerk: "Exciting digital and cash prizes for Level 3!",
-    image: `${IMG}/s10_perks.png`,
+    finale: {
+      eyebrow: "Road to Level 3",
+      title: "Grand Finale",
+      text: "Exciting digital and cash prizes for Level 3!",
+      rewards: ["Cash Prize", "Rolling Trophy", "Certificates", "Electronic Device"],
+      hostedAt: "Hosted at Cambridge Court World School",
+    },
   },
 
   thanks: {
