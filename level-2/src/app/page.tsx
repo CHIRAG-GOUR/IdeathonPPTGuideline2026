@@ -14,7 +14,7 @@ import S08Dates from "@/components/level2/S08Dates";
 import S09Judging from "@/components/level2/S09Judging";
 import S10Perks from "@/components/level2/S10Perks";
 import S11Thanks from "@/components/level2/S11Thanks";
-import { Trophy, Maximize, Minimize, RotateCw, ChevronLeft, ChevronRight, Smartphone } from "lucide-react";
+import { Trophy, Maximize, Minimize, RotateCw, ChevronLeft, ChevronRight, Presentation as PresentationIcon, GraduationCap, ExternalLink, ArrowRight } from "lucide-react";
 
 const TOTAL_SCENES = 11;
 const STAGE_WIDTH = 1440;
@@ -66,16 +66,18 @@ export default function Presentation() {
   };
 
   const nextAction = useCallback(() => {
+    if (!hasStarted) return;
     if (activeScene < TOTAL_SCENES - 1) {
       setActiveScene((prev) => prev + 1);
     }
-  }, [activeScene]);
+  }, [hasStarted, activeScene]);
 
   const prevAction = useCallback(() => {
+    if (!hasStarted) return;
     if (activeScene > 0) {
       setActiveScene((prev) => prev - 1);
     }
-  }, [activeScene]);
+  }, [hasStarted, activeScene]);
 
   // Combined Landscape + Fullscreen Mode
   const toggleLandscapeFullscreen = async () => {
@@ -122,6 +124,12 @@ export default function Presentation() {
   // Handle Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!hasStarted) {
+        if (e.key === "Enter") {
+          handleStart();
+        }
+        return;
+      }
       if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
         nextAction();
       } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
@@ -131,7 +139,7 @@ export default function Presentation() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeScene, nextAction, prevAction]);
+  }, [hasStarted, activeScene, nextAction, prevAction]);
 
   // Handle Touch Swipe Events for Mobile Navigation
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -240,38 +248,94 @@ export default function Presentation() {
         }}
       >
         {!hasStarted ? (
-          <div
-            className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
-            onClick={handleStart}
-          >
+          <div className="w-full h-full flex flex-col items-center justify-center select-none">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="relative z-10 flex flex-col items-center text-center px-6"
+              className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl w-full"
             >
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                className="mb-8 drop-shadow-sm text-yellow-500"
+                className="mb-6 drop-shadow-sm text-yellow-500"
               >
-                <Trophy size={80} strokeWidth={1.5} />
+                <Trophy size={72} strokeWidth={1.5} />
               </motion.div>
 
               <h1
-                className="text-6xl lg:text-7xl font-black uppercase tracking-tight mb-4 leading-tight text-gray-900"
+                className="text-6xl lg:text-7xl font-black uppercase tracking-tight mb-3 leading-tight text-gray-900"
                 style={{ WebkitTextStroke: "2px #111111", color: "transparent" }}
               >
                 SkilliZee Ideathon
               </h1>
-              <h2 className="text-3xl font-bold uppercase tracking-[0.15em] text-gray-600 mb-10">
+              <h2 className="text-2xl lg:text-3xl font-bold uppercase tracking-[0.15em] text-gray-600 mb-8">
                 Level 2 · Think. Build. Brand. Pitch.
               </h2>
 
-              <div className="bg-white border border-gray-200 px-8 py-4 rounded-full shadow-md">
-                <span className="text-base text-gray-600 uppercase tracking-[0.2em] font-bold animate-pulse">
-                  Click anywhere to begin
-                </span>
+              {/* 2 Separate Clickable Sections: PPT & Student Portal */}
+              <div className="flex flex-row items-stretch justify-center gap-6 w-full max-w-3xl">
+                {/* 1. Level 2 PPT Presentation */}
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.03, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleStart}
+                  className="flex-1 bg-white hover:bg-blue-50/40 border-2 border-black rounded-2xl p-6 shadow-[6px_6px_0px_#1E63D0] hover:shadow-[8px_8px_0px_#111] transition-all text-left flex flex-col justify-between cursor-pointer group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <PresentationIcon size={26} strokeWidth={2.2} />
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-blue-100 text-blue-700 border border-blue-200">
+                        Slide Deck
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-black text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                      Level 2 PPT
+                    </h3>
+                    <p className="text-sm font-semibold text-gray-500 leading-relaxed">
+                      Interactive slide presentation for mentors & students
+                    </p>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between text-sm font-black uppercase tracking-wider text-blue-600">
+                    <span>Continue to PPT</span>
+                    <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />
+                  </div>
+                </motion.button>
+
+                {/* 2. Student Portal */}
+                <motion.a
+                  href="https://skillizee.io/ccws/student"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.03, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex-1 bg-white hover:bg-emerald-50/40 border-2 border-black rounded-2xl p-6 shadow-[6px_6px_0px_#10B981] hover:shadow-[8px_8px_0px_#111] transition-all text-left flex flex-col justify-between cursor-pointer group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <GraduationCap size={26} strokeWidth={2.2} />
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                        <span>Portal</span>
+                        <ExternalLink size={12} />
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-black text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors">
+                      Student Portal
+                    </h3>
+                    <p className="text-sm font-semibold text-gray-500 leading-relaxed">
+                      Access student workspace, track progress & submit work
+                    </p>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between text-sm font-black uppercase tracking-wider text-emerald-600">
+                    <span>Open Portal</span>
+                    <ExternalLink size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </motion.a>
               </div>
             </motion.div>
           </div>
