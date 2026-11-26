@@ -121,3 +121,16 @@ body {
 .glow-blue {
   box-shadow: 0 0 20px rgba(30, 99, 208, 0.35), 0 0 60px rgba(30, 99, 208, 0.15);
 }
+
+/* ── AI Masterclass page (/ai-masterclass) tokens ── */
+@theme inline {
+  --font-display: var(--font-unbounded);
+}
+@theme {
+  --color-ink: #26245c;
+  --color-ink-soft: #5d5b8f;
+  --color-coral: #f0547a;
+  --color-coral-deep: #d93d64;
+  --color-coral-soft: #ffe3ea;
+  --color-line: rgba(38, 36, 92, 0.1);
+}

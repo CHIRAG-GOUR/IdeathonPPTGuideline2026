@@ -14,7 +14,7 @@ import S08Dates from "@/components/level2/S08Dates";
 import S09Judging from "@/components/level2/S09Judging";
 import S10Perks from "@/components/level2/S10Perks";
 import S11Thanks from "@/components/level2/S11Thanks";
-import { Trophy, Maximize, Minimize, RotateCw, ChevronLeft, ChevronRight, Presentation as PresentationIcon, GraduationCap, ExternalLink, ArrowRight } from "lucide-react";
+import { Trophy, Maximize, Minimize, RotateCw, ChevronLeft, ChevronRight, Presentation as PresentationIcon, GraduationCap, ExternalLink, ArrowRight, Sparkles } from "lucide-react";
 
 const TOTAL_SCENES = 11;
 const STAGE_WIDTH = 1440;
@@ -274,7 +274,7 @@ export default function Presentation() {
               </h2>
 
               {/* 2 Separate Clickable Sections: PPT & Student Portal */}
-              <div className="flex flex-row items-stretch justify-center gap-6 w-full max-w-3xl">
+              <div className="flex flex-row items-stretch justify-center gap-5 w-full max-w-5xl">
                 {/* 1. Level 2 PPT Presentation */}
                 <motion.button
                   type="button"
@@ -334,6 +334,35 @@ export default function Presentation() {
                   <div className="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between text-sm font-black uppercase tracking-wider text-emerald-600">
                     <span>Open Portal</span>
                     <ExternalLink size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </motion.a>
+
+                {/* 3. AI Masterclass (scrolling explainer at /ai-masterclass) */}
+                <motion.a
+                  href="/ai-masterclass"
+                  whileHover={{ scale: 1.03, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex-1 bg-white hover:bg-rose-50/40 border-2 border-black rounded-2xl p-6 shadow-[6px_6px_0px_#F0547A] hover:shadow-[8px_8px_0px_#111] transition-all text-left flex flex-col justify-between cursor-pointer group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-[#F0547A] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <Sparkles size={26} strokeWidth={2.2} />
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-rose-100 text-rose-700 border border-rose-200">
+                        Masterclass
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-black text-gray-900 mb-1 group-hover:text-[#F0547A] transition-colors">
+                      AI Masterclass
+                    </h3>
+                    <p className="text-sm font-semibold text-gray-500 leading-relaxed">
+                      2-hour AI masterclass: think, build, brand and pitch with AI
+                    </p>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between text-sm font-black uppercase tracking-wider text-[#F0547A]">
+                    <span>Open Masterclass</span>
+                    <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </motion.a>
               </div>

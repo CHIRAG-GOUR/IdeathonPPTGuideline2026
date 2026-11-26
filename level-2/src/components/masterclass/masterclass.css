@@ -1,0 +1,80 @@
+/* AI Masterclass deck — plain CSS, scoped to the deck's own classes so it can live
+   inside another site without affecting it. Colour/font tokens for Tailwind
+   (ink, coral, font-display…) live in the app's globals.css @theme block. */
+
+.mc-root {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  color: #26245c;
+}
+.mc-root ::selection {
+  background: #ffe3ea;
+  color: #26245c;
+}
+
+/* The deck's own scroll container: page-by-page snapping on laptop/desktop,
+   gentler on phones where a section may be taller than the screen. */
+.mc-scroller {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  overscroll-behavior: contain;
+}
+@media (min-width: 1024px) and (min-height: 680px) {
+  .mc-scroller {
+    scroll-snap-type: y mandatory;
+  }
+}
+
+/* Light-only range sliders: coral fill on a lavender track, white thumb. */
+.mc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #f0547a var(--p, 50%), #e5e3ff var(--p, 50%));
+  outline: none;
+}
+.mc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #f0547a;
+  box-shadow: 0 4px 12px -2px rgba(240, 84, 122, 0.5);
+}
+.mc-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #f0547a;
+}
+.mc-range:focus-visible {
+  box-shadow: 0 0 0 4px #ffe3ea;
+}
+
+@keyframes mc-drift {
+  from { transform: translateX(-6vw); }
+  to   { transform: translateX(6vw); }
+}
+@keyframes mc-rise {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(-110vh) scale(1); opacity: 0; }
+}
+@keyframes mc-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes mc-dash {
+  to { stroke-dashoffset: -24; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-scroller { scroll-behavior: auto; }
+  .mc-root *, .mc-root *::before, .mc-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
