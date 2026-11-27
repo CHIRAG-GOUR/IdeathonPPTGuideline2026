@@ -75,7 +75,7 @@ export default function ExitTicket() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.3} className="min-h-[240px]">
+        <Reveal delay={0.3} className="h-full min-h-[240px] flex flex-col">
           <ImageSlot src={d.image.src} label={d.image.label} className="w-full h-full min-h-[240px]" />
         </Reveal>
       </div>

@@ -55,6 +55,45 @@
   box-shadow: 0 0 0 4px #ffe3ea;
 }
 
+/* Sky life: birds, sea, stars, ship, balloon */
+@keyframes mc-fly {
+  from { transform: translateX(-18vw); }
+  to   { transform: translateX(118vw); }
+}
+@keyframes mc-fly-rev {
+  from { transform: translateX(118vw) scaleX(-1); }
+  to   { transform: translateX(-18vw) scaleX(-1); }
+}
+@keyframes mc-flap {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(-0.55); }
+}
+@keyframes mc-glide {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes mc-wave {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes mc-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50%      { opacity: 1; transform: scale(1.1); }
+}
+@keyframes mc-bob {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-6px) rotate(2.5deg); }
+}
+@keyframes mc-shimmer {
+  0%, 100% { transform: scaleX(1); opacity: 0.75; }
+  50%      { transform: scaleX(1.35); opacity: 1; }
+}
+.mc-bird path {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: mc-flap 0.55s ease-in-out infinite;
+}
+
 @keyframes mc-drift {
   from { transform: translateX(-6vw); }
   to   { transform: translateX(6vw); }

@@ -18,7 +18,8 @@ export default function Hero() {
   const midY = useTransform(scrollYProgress, [0, 1], ["0%", "34%"]);
   const nearY = useTransform(scrollYProgress, [0, 1], ["0%", "55%"]);
   const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-40%"]);
-  const titleO = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  // Function form keeps this exact (no native scroll-timeline hand-off).
+  const titleO = useTransform(scrollYProgress, (v) => Math.max(0, 1 - v / 0.7));
   const planeX = useTransform(scrollYProgress, [0, 1], ["0vw", "40vw"]);
   const planeY = useTransform(scrollYProgress, [0, 1], ["0vh", "-30vh"]);
 

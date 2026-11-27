@@ -62,7 +62,7 @@ export default function Pitch() {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={0.3} className="min-h-[200px]">
+        <Reveal delay={0.3} className="h-full min-h-[200px] flex flex-col">
           <ImageSlot src={d.image.src} label={d.image.label} className="w-full h-full min-h-[200px]" />
         </Reveal>
       </div>
