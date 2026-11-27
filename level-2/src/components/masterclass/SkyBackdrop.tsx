@@ -25,19 +25,19 @@ function useFade(p: MotionValue<number>, input: number[], output: number[]) {
  * The living sky behind the whole deck: one full day, driven by scroll.
  *
  *   top ─────────────────────────────────────────────── end
- *   dawn → morning → noon → afternoon → golden → moonlit night
- *   sun rises, arcs over ── cools into a moon ── sinks into the sea
+ *   dawn → morning → noon → afternoon → golden → sunset → starry night
+ *   sun rises, arcs over ── sets into the sea ── moon rises from the sea
  *   birds + balloon in daylight ────── sea rises, ship sails, stars appear
  *
  * Everything is a pure function of scroll position, so scrolling back up
- * plays the day in reverse: the moon rises out of the sea, warms back into
- * the sun and returns to dawn at the top. Light colours only.
+ * plays the day in reverse: the moon sinks, the sun rises from the sea and
+ * the sky returns to dawn at the top.
  *
  * Performance: sky colours are pre-painted layers cross-faded with opacity,
  * and all motion is transform/opacity (GPU-composited).
  */
 
-const STOPS = [0, 0.15, 0.3, 0.45, 0.6, 0.73, 0.86];
+const STOPS = [0, 0.15, 0.3, 0.45, 0.6, 0.76, 0.88];
 const SKIES = [
   ["#9aa4ff", "#d5d0ff", "#ffe4d6"], // dawn
   ["#a3c9ff", "#d6e8ff", "#eef5ff"], // morning
@@ -45,7 +45,7 @@ const SKIES = [
   ["#c8d3ff", "#e9e6ff", "#fff2ea"], // afternoon
   ["#ffcfb3", "#ffe3cf", "#fff3e6"], // golden hour
   ["#f3b7c9", "#f9cfd0", "#ffe6da"], // sunset
-  ["#7f88dc", "#a9aef0", "#d6d8fb"], // night (soft periwinkle, stars visible)
+  ["#0f1440", "#232a6b", "#4a4f9c"], // night: deep indigo → navy, lighter at the horizon
 ];
 
 // Timeline (scroll progress 0..1). Pages sit at 0, 0.1, 0.2 … 1.
@@ -78,13 +78,35 @@ const SPARKS = Array.from({ length: 18 }, (_, i) => ({
   dur: round(12 + rnd(i, 4) * 12),
 }));
 
-const STARS = Array.from({ length: 34 }, (_, i) => ({
+const STAR_TINTS = ["#ffffff", "#ffffff", "#dfe6ff", "#fff1d6", "#e8e0ff"];
+const STARS = Array.from({ length: 120 }, (_, i) => ({
+  wave: i % 4, // which wave of stars it appears with
   left: round(rnd(i, 11) * 100),
-  top: round(rnd(i, 12) * 58),
-  size: round(2 + rnd(i, 13) * 3),
-  delay: round(rnd(i, 14) * 4),
-  dur: round(2.2 + rnd(i, 15) * 2.5),
+  top: round(rnd(i, 12) * 66),
+  size: round(1 + rnd(i, 13) * (i % 9 === 0 ? 3.2 : 1.8)),
+  delay: round(rnd(i, 14) * 5),
+  dur: round(1.8 + rnd(i, 15) * 3),
+  tint: STAR_TINTS[i % STAR_TINTS.length],
 }));
+// A few bright four-point stars.
+const BRIGHT = Array.from({ length: 7 }, (_, i) => ({
+  left: round(8 + rnd(i, 21) * 84),
+  top: round(4 + rnd(i, 22) * 44),
+  size: round(14 + rnd(i, 23) * 12),
+  delay: round(rnd(i, 24) * 3),
+}));
+// Milky Way dust.
+const DUST = Array.from({ length: 70 }, (_, i) => ({
+  left: round(rnd(i, 31) * 100),
+  top: round(35 + (rnd(i, 32) - 0.5) * 40),
+  size: round(0.8 + rnd(i, 33) * 1.6),
+  o: round(0.3 + rnd(i, 34) * 0.5),
+}));
+const SHOOTING = [
+  { top: "10%", left: "78%", dur: 9, delay: 1 },
+  { top: "24%", left: "58%", dur: 13, delay: 6 },
+  { top: "6%", left: "40%", dur: 17, delay: 11 },
+];
 
 // Bird flocks: different heights, speeds, directions and start times.
 const FLOCKS = [
@@ -127,6 +149,54 @@ function SkyLayer({ colors, index, progress }: { colors: string[]; index: number
         willChange: "opacity",
       }}
     />
+  );
+}
+
+function StarWave({ wave, progress }: { wave: number; progress: MotionValue<number> }) {
+  const start = 0.8 + wave * 0.03;
+  const opacity = useFade(progress, [start, start + 0.04], [0, 1]);
+  return (
+    <motion.div className="absolute inset-0" style={{ opacity }}>
+      {STARS.filter((s) => s.wave === wave).map((s, i) => (
+        <span
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            width: s.size,
+            height: s.size,
+            background: s.tint,
+            boxShadow: `0 0 ${3 + s.size * 2}px ${s.size / 2}px ${s.tint}`,
+            animation: `mc-twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
+          }}
+        />
+      ))}
+    </motion.div>
+  );
+}
+
+function BrightStar({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden>
+      <path d="M10 0 C 10.8 7 13 9.2 20 10 C 13 10.8 10.8 13 10 20 C 9.2 13 7 10.8 0 10 C 7 9.2 9.2 7 10 0 Z" fill="white" />
+      <circle cx="10" cy="10" r="2.2" fill="white" />
+    </svg>
+  );
+}
+
+function ShootingStar({ top, left, dur, delay }: (typeof SHOOTING)[number]) {
+  return (
+    <div className="absolute" style={{ top, left, transform: "rotate(-24deg)", transformOrigin: "0 0" }}>
+      <div
+        className="h-[2px] w-[150px] rounded-full"
+        style={{
+          background: "linear-gradient(90deg, #ffffff, rgba(255,255,255,0.55) 30%, rgba(255,255,255,0))",
+          boxShadow: "0 0 8px 1px rgba(255,255,255,0.7)",
+          animation: `mc-shoot ${dur}s ease-out ${delay}s infinite`,
+        }}
+      />
+    </div>
   );
 }
 
@@ -267,11 +337,14 @@ export default function SkyBackdrop() {
   const sunX = useLerp(p, [0, 0.45, T.sunSet[0], T.sunSet[1]], [6, 40, 60, 64], "vw");
   const sunY = useLerp(p, [0, 0.45, T.sunSet[0], T.sunSet[1]], [30, 6, 50, 94], "vh");
   // Moon: rises from behind the sea on the other side, climbs into the night sky.
-  const moonX = useLerp(p, T.moonRise, [20, 26], "vw");
-  const moonY = useLerp(p, T.moonRise, [94, 14], "vh");
+  const moonX = useLerp(p, T.moonRise, [56, 66], "vw");
+  const moonY = useLerp(p, T.moonRise, [94, 3], "vh");
 
   const dayO = useFade(p, T.day, [1, 0]); // birds, balloon, rays
-  const starsO = useFade(p, [0.76, 0.92], [0, 1]);
+  const starsO = useFade(p, [0.88, 0.93], [0, 1]);
+  const nightO = useFade(p, [0.8, 0.9], [0, 1]); // Milky Way, shooting stars, night sea, horizon glow
+  const cloudsO = useFade(p, [0.78, 0.9], [1, 0.08]); // clouds thin out to wisps at night
+  const seaNightO = useFade(p, [0.78, 0.9], [0, 0.78]);
   const seaY = useLerp(p, T.seaIn, [105, 0], "%");
   const shipX = useLerp(p, T.ship, [-16, 62], "vw");
   const sunGlintO = useFade(p, [0.66, 0.76, 0.84], [0, 0.85, 0]);
@@ -284,21 +357,48 @@ export default function SkyBackdrop() {
         <SkyLayer key={i} colors={c} index={i} progress={p} />
       ))}
 
-      {/* Stars (night) */}
-      <motion.div className="absolute inset-0" style={{ opacity: starsO }}>
-        {STARS.map((s, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-white"
+      {/* ── Night sky ── */}
+      <motion.div className="absolute inset-0" style={{ opacity: nightO }}>
+        {/* Milky Way: a soft diagonal band of light and dust */}
+        <div className="absolute -left-[20%] top-[8%] w-[140%] h-[34vh]" style={{ transform: "rotate(-14deg)" }}>
+          <div
+            className="absolute inset-0"
             style={{
-              left: `${s.left}%`,
-              top: `${s.top}%`,
-              width: s.size,
-              height: s.size,
-              boxShadow: "0 0 6px 1px rgba(255,255,255,0.9)",
-              animation: `mc-twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
+              background: "radial-gradient(ellipse at 50% 50%, rgba(200,205,255,0.22) 0%, rgba(160,170,255,0.08) 45%, transparent 70%)",
+              filter: "blur(18px)",
             }}
           />
+          {DUST.map((d, k) => (
+            <span
+              key={k}
+              className="absolute rounded-full bg-white"
+              style={{ left: `${d.left}%`, top: `${d.top}%`, width: d.size, height: d.size, opacity: d.o }}
+            />
+          ))}
+        </div>
+        {/* Horizon glow above the sea */}
+        <div
+          className="absolute inset-x-0 bottom-[22vh] h-[24vh]"
+          style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(170,175,255,0.38), rgba(170,175,255,0) 70%)" }}
+        />
+        {SHOOTING.map((st, k) => (
+          <ShootingStar key={k} {...st} />
+        ))}
+      </motion.div>
+
+      {/* Stars arrive in four waves as night falls */}
+      {[0, 1, 2, 3].map((w) => (
+        <StarWave key={w} wave={w} progress={p} />
+      ))}
+      <motion.div className="absolute inset-0" style={{ opacity: starsO }}>
+        {BRIGHT.map((b, k) => (
+          <div
+            key={k}
+            className="absolute"
+            style={{ left: `${b.left}%`, top: `${b.top}%`, animation: `mc-twinkle 3.2s ease-in-out ${b.delay}s infinite`, filter: "drop-shadow(0 0 6px rgba(255,255,255,0.9))" }}
+          >
+            <BrightStar size={b.size} />
+          </div>
         ))}
       </motion.div>
 
@@ -367,17 +467,16 @@ export default function SkyBackdrop() {
         </motion.div>
       </motion.div>
 
-      {CLOUDS.map((c, i) => (
-        <ParallaxCloud key={i} {...c} />
-      ))}
+      <motion.div className="absolute inset-0" style={{ opacity: cloudsO }}>
+        {CLOUDS.map((c, i) => (
+          <ParallaxCloud key={i} {...c} />
+        ))}
+      </motion.div>
 
       {/* Sea: rises near the end; the moon sinks behind it */}
       <motion.div className="absolute inset-x-0 bottom-0 h-[30vh]" style={{ y: seaY, willChange: "transform" }}>
         <div className="absolute -top-4 inset-x-0 h-8 bg-gradient-to-b from-transparent to-white/60 blur-md" />
         <WaveStrip top="0%" color="#c9e9fc" foam={0.7} dur={22} amp={14} />
-        {/* Sun glint (warm) while it sets, moon glint (silver) while it rises */}
-        <Glint x={sunX} opacity={sunGlintO} color="255,214,150" />
-        <Glint x={moonX} opacity={moonGlintO} color="255,255,255" />
         {/* ship rides between the back and front waves */}
         <motion.div className="absolute top-[-6%] left-0" style={{ x: shipX, willChange: "transform" }}>
           <div style={{ animation: "mc-bob 3.2s ease-in-out infinite", transformOrigin: "50% 90%" }}>
@@ -386,6 +485,14 @@ export default function SkyBackdrop() {
         </motion.div>
         <WaveStrip top="34%" color="#addcf7" foam={0.6} dur={15} amp={18} reverse />
         <WaveStrip top="62%" color="#98d1f4" foam={0.55} dur={11} amp={12} />
+        {/* Night tint: the water turns deep blue under the moon */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ opacity: seaNightO, background: "linear-gradient(180deg, #2a3180 0%, #182058 55%, #10164a 100%)" }}
+        />
+        {/* Sun glint (warm) while it sets, moon glint (silver) while it rises: above the tint */}
+        <Glint x={sunX} opacity={sunGlintO} color="255,214,150" />
+        <Glint x={moonX} opacity={moonGlintO} color="255,255,255" />
       </motion.div>
 
       {/* Rising sparkles */}

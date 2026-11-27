@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { animate, type AnimationPlaybackControls } from "framer-motion";
+import { animate, motion, useScroll, useTransform, type AnimationPlaybackControls, type MotionStyle } from "framer-motion";
 import "./masterclass.css";
 import { display, sans } from "./fonts";
 import { ScrollerCtx, type Pager } from "./Scroll";
@@ -21,6 +21,15 @@ import ResponsibleAI from "./sections/ResponsibleAI";
 import ExitTicket from "./sections/ExitTicket";
 
 const EASE = [0.65, 0, 0.35, 1] as const; // smooth in-out glide
+
+/** Blend two #rrggbb colours. */
+function mixHex(a: string, b: string, t: number) {
+  const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+  const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+  return `rgb(${pa.map((v, k) => Math.round(v + (pb[k] - v) * t)).join(",")})`;
+}
+/** 0 by day → 1 at night. The switch happens between the Pitch and Responsible AI pages. */
+const nightT = (v: number) => Math.min(1, Math.max(0, (v - 0.83) / 0.05));
 
 /**
  * The whole AI Masterclass deck. Drop <Deck /> on any page.
@@ -132,10 +141,16 @@ export default function Deck({ homeHref }: { homeHref?: string }) {
 
   const pager = useMemo<Pager>(() => ({ ref: scroller, goTo, step }), [goTo, step]);
 
+  // On-sky text colour: ink by day, white at night.
+  const { scrollYProgress } = useScroll({ container: scroller });
+  const head = useTransform(scrollYProgress, (v) => mixHex("#26245c", "#ffffff", nightT(v)));
+  const sub = useTransform(scrollYProgress, (v) => mixHex("#5d5b8f", "#c9ccff", nightT(v)));
+  const skyText = { "--mc-head": head, "--mc-sub": sub } as unknown as MotionStyle;
+
   return (
     <ScrollerCtx.Provider value={pager}>
       <NotesProvider>
-        <div className={`mc-root ${display.variable} ${sans.variable}`}>
+        <motion.div className={`mc-root ${display.variable} ${sans.variable}`} style={skyText}>
           <SkyBackdrop />
           <Chrome homeHref={homeHref} />
           <div ref={scroller} className="mc-scroller fixed inset-0 overflow-y-auto overflow-x-hidden z-10">
@@ -153,7 +168,7 @@ export default function Deck({ homeHref }: { homeHref?: string }) {
               <ExitTicket />
             </main>
           </div>
-        </div>
+        </motion.div>
       </NotesProvider>
     </ScrollerCtx.Provider>
   );

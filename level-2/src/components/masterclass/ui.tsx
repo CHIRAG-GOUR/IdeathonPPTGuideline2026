@@ -86,12 +86,12 @@ export function Section({
                 <span className="font-mono text-[12px] font-bold text-coral tabular-nums">
                   {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
                 </span>
-                <span className="h-px w-8 bg-ink/20" />
-                <Label>{eyebrow}</Label>
+                <span className="h-px w-8 bg-[color:var(--mc-sub)] opacity-40" />
+                <Label className="!text-[color:var(--mc-sub)]">{eyebrow}</Label>
               </div>
             </Reveal>
             <Reveal delay={0.08}>
-              <h2 className="mt-3 font-display font-extrabold uppercase text-ink text-[clamp(26px,3.4vw,46px)] leading-[1.05] tracking-tight max-w-4xl">
+              <h2 className="mt-3 font-display font-extrabold uppercase text-[color:var(--mc-head)] text-[clamp(26px,3.4vw,46px)] leading-[1.05] tracking-tight max-w-4xl">
                 {title}
               </h2>
             </Reveal>

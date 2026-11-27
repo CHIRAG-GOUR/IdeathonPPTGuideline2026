@@ -97,11 +97,11 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
           <span className="relative w-9 h-9 rounded-full bg-coral overflow-hidden shadow-md">
             <span className="absolute -right-2 top-2 w-5 h-5 rounded-full bg-white/90" />
           </span>
-          <span className="text-left leading-none" style={{ textShadow: onHero ? "0 2px 12px rgba(70,60,170,0.35)" : "0 1px 8px rgba(255,255,255,0.8)" }}>
-            <span className={`block font-display font-extrabold text-[15px] tracking-wide transition-colors ${onHero ? "text-white" : "text-ink"}`}>
+          <span className="text-left leading-none" style={{ textShadow: onHero ? "0 2px 12px rgba(70,60,170,0.35)" : "0 1px 8px rgba(255,255,255,0.35)" }}>
+            <span className={`block font-display font-extrabold text-[15px] tracking-wide transition-colors ${onHero ? "text-white" : "text-[color:var(--mc-head)]"}`}>
               {deck.meta.brand}
             </span>
-            <span className={`block font-mono text-[10.5px] tracking-[0.22em] uppercase mt-0.5 transition-colors ${onHero ? "text-white/90" : "text-ink-soft"}`}>
+            <span className={`block font-mono text-[10.5px] tracking-[0.22em] uppercase mt-0.5 transition-colors ${onHero ? "text-white/90" : "text-[color:var(--mc-sub)]"}`}>
               {deck.meta.product}
             </span>
           </span>

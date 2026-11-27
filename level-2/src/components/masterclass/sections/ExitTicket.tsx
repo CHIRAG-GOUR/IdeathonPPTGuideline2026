@@ -88,7 +88,7 @@ export default function ExitTicket() {
             whileInView={{ letterSpacing: "-0.01em", opacity: 1 }}
             viewport={{ once: false, amount: 0.8 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-[clamp(20px,2.6vw,34px)] font-extrabold uppercase text-ink leading-tight max-w-3xl"
+            className="font-display text-[clamp(20px,2.6vw,34px)] font-extrabold uppercase text-[color:var(--mc-head)] leading-tight max-w-3xl"
           >
             {d.closing}
           </motion.p>

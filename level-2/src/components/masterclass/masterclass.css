@@ -6,6 +6,18 @@
   font-family: var(--font-jakarta), system-ui, sans-serif;
   color: #26245c;
 }
+/* Text that sits directly on the sky switches from ink to white at night
+   (values are driven by scroll in Deck.tsx; these are the daytime defaults). */
+.mc-root {
+  --mc-head: #26245c;
+  --mc-sub: #5d5b8f;
+}
+@keyframes mc-shoot {
+  0%   { transform: translateX(0); opacity: 0; }
+  3%   { opacity: 1; }
+  14%  { transform: translateX(-46vw); opacity: 0; }
+  100% { transform: translateX(-46vw); opacity: 0; }
+}
 .mc-root ::selection {
   background: #ffe3ea;
   color: #26245c;
