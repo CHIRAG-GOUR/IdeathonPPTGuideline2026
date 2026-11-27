@@ -14,13 +14,14 @@
 /* The deck's own scroll container: page-by-page snapping on laptop/desktop,
    gentler on phones where a section may be taller than the screen. */
 .mc-scroller {
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+  scroll-behavior: auto; /* the deck animates page glides itself */
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
-@media (min-width: 1024px) and (min-height: 680px) {
+/* Touch screens: native scrolling with gentle page snapping. */
+@media (pointer: coarse) {
   .mc-scroller {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
   }
 }
 
@@ -71,7 +72,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mc-scroller { scroll-behavior: auto; }
   .mc-root *, .mc-root *::before, .mc-root *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

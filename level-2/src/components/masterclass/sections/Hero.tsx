@@ -2,14 +2,15 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown, Sparkles, Lightbulb, Box, Palette, Mic } from "lucide-react";
 import { deck } from "@/content/masterclass";
-import { useScroller } from "../Scroll";
+import { useScroller, usePager } from "../Scroll";
 
 export default function Hero() {
   const d = deck.hero;
   const ref = useRef<HTMLElement>(null);
   const scroller = useScroller();
+  const { goTo } = usePager();
   const { scrollYProgress } = useScroll({ target: ref, container: scroller, offset: ["start start", "end start"] });
 
   // Parallax layers: far hills move least, near hills most; title floats up and fades.
@@ -53,7 +54,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0, letterSpacing: "-0.01em" }}
               transition={{ duration: 1.1, delay: 0.3 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               className={`block ${
-                i === 1 ? "text-[clamp(34px,8.6vw,128px)]" : "text-[clamp(28px,6vw,88px)]"
+                i === 1 ? "text-[clamp(34px,8.6vw,128px)]" : "text-[clamp(40px,7vw,104px)]"
               }`}
             >
               {w}
@@ -86,7 +87,7 @@ export default function Hero() {
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2 }} className="mt-8">
           <button
-            onClick={() => document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => goTo("agenda")}
             className="group inline-flex items-center gap-2 rounded-xl bg-coral px-7 py-3.5 font-display text-[13px] font-semibold uppercase tracking-[0.15em] text-white shadow-[0_12px_30px_-10px_rgba(240,84,122,0.8)] hover:bg-coral-deep transition-colors cursor-pointer"
           >
             {d.cta}
@@ -94,6 +95,34 @@ export default function Hero() {
           </button>
         </motion.div>
       </motion.div>
+
+      {/* Floating badges: Think / Build / Brand / Pitch */}
+      {[
+        { Icon: Lightbulb, pos: "left-[9%] top-[22%]", tint: "#e5e3ff", d: 0 },
+        { Icon: Box, pos: "right-[10%] top-[20%]", tint: "#d9efff", d: 0.6 },
+        { Icon: Palette, pos: "left-[7%] top-[62%]", tint: "#dcf6ee", d: 1.2 },
+        { Icon: Mic, pos: "right-[7%] top-[60%]", tint: "#ffe3ea", d: 1.8 },
+      ].map(({ Icon, pos, tint, d }, k) => (
+        <motion.div
+          key={k}
+          style={{ y: titleY }}
+          className={`absolute ${pos} z-10 hidden lg:block pointer-events-none`}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2 + d * 0.3, type: "spring", bounce: 0.5 }}
+          aria-hidden
+        >
+          <motion.div
+            animate={{ y: [0, -14, 0], rotate: [-6, 6, -6] }}
+            transition={{ repeat: Infinity, duration: 5 + k, ease: "easeInOut", delay: d }}
+            className="w-16 h-16 rounded-[22px] bg-white/80 border border-white shadow-[0_18px_40px_-15px_rgba(60,50,160,0.55)] flex items-center justify-center"
+          >
+            <span className="w-11 h-11 rounded-2xl flex items-center justify-center text-ink" style={{ background: tint }}>
+              <Icon size={22} />
+            </span>
+          </motion.div>
+        </motion.div>
+      ))}
 
       {/* Paper plane: AI as co-pilot */}
       <motion.div style={{ x: planeX, y: planeY }} className="absolute left-[12%] top-[58%] z-10 pointer-events-none" aria-hidden>

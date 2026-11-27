@@ -20,8 +20,8 @@ export function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.25 }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
@@ -35,7 +35,7 @@ export function Reveal({
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-3xl bg-white/75 backdrop-blur-md border border-white shadow-[0_24px_60px_-30px_rgba(60,50,160,0.45)] ${className}`}
+      className={`rounded-3xl bg-white/85 border border-white shadow-[0_24px_60px_-30px_rgba(60,50,160,0.45)] ${className}`}
     >
       {children}
     </div>
@@ -57,12 +57,14 @@ export function Section({
   eyebrow,
   title,
   notes,
+  art,
   children,
 }: {
   id: string;
   eyebrow?: string;
   title?: string;
   notes?: string;
+  art?: ReactNode;
   children: ReactNode;
 }) {
   const index = deck.nav.findIndex((n) => n.id === id) + 1;
@@ -77,7 +79,8 @@ export function Section({
     >
       <div className="w-full max-w-6xl mx-auto">
         {title && (
-          <header className="mb-6 lg:mb-7">
+          <header className="mb-6 lg:mb-7 flex items-end justify-between gap-6">
+            <div className="min-w-0">
             <Reveal y={16}>
               <div className="flex items-center gap-3">
                 <span className="font-mono text-[12px] font-bold text-coral tabular-nums">
@@ -92,6 +95,8 @@ export function Section({
                 {title}
               </h2>
             </Reveal>
+            </div>
+            {art && <div className="hidden md:block shrink-0 mr-8 lg:mr-10">{art}</div>}
           </header>
         )}
         {children}

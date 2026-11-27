@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { SearchCheck, Tag, Hand, ShieldCheck, Copyright } from "lucide-react";
 import { deck } from "@/content/masterclass";
+import { ShieldTick } from "../Illustrations";
 import { Section, Card } from "../ui";
 
 const icons = [SearchCheck, Tag, Hand, ShieldCheck, Copyright];
@@ -10,7 +11,7 @@ const icons = [SearchCheck, Tag, Hand, ShieldCheck, Copyright];
 export default function ResponsibleAI() {
   const d = deck.responsible;
   return (
-    <Section id="responsible-ai" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="responsible-ai" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<ShieldTick />}>
       <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {d.rules.map((r, i) => {
           const Icon = icons[i];

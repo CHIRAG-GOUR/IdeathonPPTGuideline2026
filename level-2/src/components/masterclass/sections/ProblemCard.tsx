@@ -4,7 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { RotateCcw, ClipboardList } from "lucide-react";
 import { deck } from "@/content/masterclass";
+import { ClipboardTick } from "../Illustrations";
 import { Section, Card, Reveal, Label } from "../ui";
+import ImageSlot from "../ImageSlot";
 
 /** A live Problem Card: the mentor can fill it in on screen with a team's answers. */
 export default function ProblemCard() {
@@ -13,13 +15,14 @@ export default function ProblemCard() {
   const filled = values.filter((v) => v.trim()).length;
 
   return (
-    <Section id="problem-card" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="problem-card" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<ClipboardTick />}>
       <Reveal delay={0.1}>
         <p className="text-[17px] sm:text-[19px] font-semibold text-ink-soft -mt-4 mb-7">{d.lead}</p>
       </Reveal>
 
+      <div className="grid lg:grid-cols-[1.65fr_1fr] gap-5 items-stretch">
       <Reveal delay={0.15}>
-        <Card className="p-5 sm:p-7">
+        <Card className="p-5 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
             <div className="flex items-center gap-3">
               <span className="w-10 h-10 rounded-2xl bg-coral text-white flex items-center justify-center">
@@ -62,7 +65,7 @@ export default function ProblemCard() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ delay: 0.2 + i * 0.08 }}
-                  className={`grid sm:grid-cols-[230px_1fr] gap-2 sm:gap-5 items-center rounded-2xl px-4 py-3 border ${
+                  className={`grid sm:grid-cols-[210px_1fr] gap-2 sm:gap-4 items-center rounded-2xl px-4 py-3 border ${
                     isSuccess ? "bg-coral-soft/60 border-coral/30" : "bg-white/70 border-line"
                   }`}
                 >
@@ -85,6 +88,10 @@ export default function ProblemCard() {
           </Label>
         </Card>
       </Reveal>
+      <Reveal delay={0.3} className="hidden lg:block">
+        <ImageSlot src={deck.think.image.src} label={deck.think.image.label} className="w-full h-full min-h-[300px]" />
+      </Reveal>
+      </div>
     </Section>
   );
 }

@@ -1,18 +1,25 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { useScroller } from "./Scroll";
 
 /**
- * Fixed sky behind the whole page. As you scroll, the sky moves from dawn to
+ * Fixed sky behind the whole deck. As you scroll, the sky moves from dawn to
  * dusk and the sun travels across it in an arc. Light colours only.
+ *
+ * Performance: the sky is 6 pre-painted gradient layers that cross-fade with
+ * `opacity` (GPU-only), instead of repainting a gradient on every scroll frame.
  */
 
-// dawn → morning → noon → afternoon → golden hour → dusk
 const STOPS = [0, 0.2, 0.4, 0.6, 0.8, 1];
-const TOP = ["#9aa4ff", "#a3c9ff", "#b3defd", "#bfe9ee", "#ffcfb3", "#e7c2f2"];
-const MID = ["#d5d0ff", "#d6e8ff", "#def3ff", "#e3f8f2", "#ffe3cf", "#f6dcf5"];
-const BOTTOM = ["#ffe4d6", "#eef5ff", "#f6fbff", "#f3fff8", "#fff3e6", "#ffeef6"];
+const SKIES = [
+  ["#9aa4ff", "#d5d0ff", "#ffe4d6"], // dawn
+  ["#a3c9ff", "#d6e8ff", "#eef5ff"], // morning
+  ["#b3defd", "#def3ff", "#f6fbff"], // noon
+  ["#bfe9ee", "#e3f8f2", "#f3fff8"], // afternoon
+  ["#ffcfb3", "#ffe3cf", "#fff3e6"], // golden hour
+  ["#e7c2f2", "#f6dcf5", "#ffeef6"], // dusk
+];
 
 const CLOUDS = [
   { top: "12%", left: "-4%", w: 340, o: 0.85, speed: -60, dur: 38 },
@@ -22,13 +29,12 @@ const CLOUDS = [
   { top: "80%", left: "30%", w: 380, o: 0.55, speed: -150, dur: 50 },
 ];
 
-// Deterministic sparkle positions (same on server and client).
+// Deterministic sparkle positions, rounded so server and client match exactly.
 const SPARKS = Array.from({ length: 22 }, (_, i) => {
   const r = (n: number) => {
     const x = Math.sin((i + 1) * 9301 + n * 49297) * 233280;
     return x - Math.floor(x);
   };
-  // Rounded so server and client render identical style strings (no hydration mismatch).
   const round = (v: number) => Math.round(v * 100) / 100;
   return { left: round(r(1) * 100), size: round(3 + r(2) * 5), delay: round(r(3) * 14), dur: round(12 + r(4) * 12) };
 });
@@ -44,23 +50,43 @@ function Cloud({ width, opacity }: { width: number; opacity: number }) {
   );
 }
 
+function SkyLayer({ colors, index, progress }: { colors: string[]; index: number; progress: MotionValue<number> }) {
+  const prev = STOPS[Math.max(0, index - 1)];
+  const at = STOPS[index];
+  const next = STOPS[Math.min(STOPS.length - 1, index + 1)];
+  const opacity = useTransform(
+    progress,
+    index === 0 ? [at, next] : index === STOPS.length - 1 ? [prev, at] : [prev, at, next],
+    index === 0 ? [1, 0] : index === STOPS.length - 1 ? [0, 1] : [0, 1, 0]
+  );
+  return (
+    <motion.div
+      className="absolute inset-0"
+      style={{
+        opacity: index === 0 ? 1 : opacity,
+        background: `linear-gradient(180deg, ${colors[0]} 0%, ${colors[1]} 55%, ${colors[2]} 100%)`,
+        willChange: "opacity",
+      }}
+    />
+  );
+}
+
 export default function SkyBackdrop() {
   const scroller = useScroller();
   const { scrollYProgress } = useScroll({ container: scroller });
-  const top = useTransform(scrollYProgress, STOPS, TOP);
-  const mid = useTransform(scrollYProgress, STOPS, MID);
-  const bottom = useTransform(scrollYProgress, STOPS, BOTTOM);
-  const background = useMotionTemplate`linear-gradient(180deg, ${top} 0%, ${mid} 55%, ${bottom} 100%)`;
 
   // Sun arc: rises from the left, peaks mid-page, sets on the right.
   const sunX = useTransform(scrollYProgress, [0, 1], ["6vw", "84vw"]);
   const sunY = useTransform(scrollYProgress, [0, 0.5, 1], ["30vh", "6vh", "30vh"]);
-  const sunHue = useTransform(scrollYProgress, [0, 0.5, 0.8, 1], ["#fff6d6", "#fffbe8", "#ffd9a8", "#ffd1e6"]);
 
   return (
-    <motion.div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" style={{ background }} aria-hidden>
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden>
+      {SKIES.map((c, i) => (
+        <SkyLayer key={i} colors={c} index={i} progress={scrollYProgress} />
+      ))}
+
       {/* Sun + glow */}
-      <motion.div className="absolute" style={{ x: sunX, y: sunY }}>
+      <motion.div className="absolute" style={{ x: sunX, y: sunY, willChange: "transform" }}>
         <div className="relative w-40 h-40">
           <div
             className="absolute -inset-40 rounded-full opacity-60"
@@ -75,11 +101,14 @@ export default function SkyBackdrop() {
               animation: "mc-spin 90s linear infinite",
             }}
           />
-          <motion.div className="absolute inset-6 rounded-full blur-[2px]" style={{ background: sunHue }} />
+          <div
+            className="absolute inset-6 rounded-full"
+            style={{ background: "radial-gradient(circle at 40% 40%, #fffdf0, #ffe7a8 70%)", boxShadow: "0 0 60px 20px rgba(255,236,180,0.6)" }}
+          />
         </div>
       </motion.div>
 
-      {/* Diagonal light shafts, like sun through haze */}
+      {/* Diagonal light shafts, like sun through haze (static) */}
       <div className="absolute inset-0 opacity-40">
         {[12, 28, 46].map((l, i) => (
           <div
@@ -90,12 +119,10 @@ export default function SkyBackdrop() {
         ))}
       </div>
 
-      {/* Parallax clouds */}
       {CLOUDS.map((c, i) => (
         <ParallaxCloud key={i} {...c} />
       ))}
 
-      {/* Rising sparkles */}
       {SPARKS.map((s, i) => (
         <span
           key={i}
@@ -109,7 +136,7 @@ export default function SkyBackdrop() {
           }}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }
 
@@ -118,7 +145,7 @@ function ParallaxCloud({ top, left, w, o, speed, dur }: (typeof CLOUDS)[number])
   const { scrollY } = useScroll({ container: scroller });
   const y = useTransform(scrollY, [0, 4000], [0, speed * 6]);
   return (
-    <motion.div className="absolute" style={{ top, left, y }}>
+    <motion.div className="absolute" style={{ top, left, y, willChange: "transform" }}>
       <div style={{ animation: `mc-drift ${dur}s ease-in-out infinite alternate` }}>
         <Cloud width={w} opacity={o} />
       </div>

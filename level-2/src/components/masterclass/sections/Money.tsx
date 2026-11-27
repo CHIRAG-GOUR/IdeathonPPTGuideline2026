@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Percent, Scale, HelpCircle, RotateCcw } from "lucide-react";
 import { deck } from "@/content/masterclass";
+import { CoinStack } from "../Illustrations";
 import { Section, Card, Reveal, Label } from "../ui";
 
 const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
@@ -64,7 +65,7 @@ export default function Money() {
   };
 
   return (
-    <Section id="money" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="money" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<CoinStack />}>
       <div className="grid lg:grid-cols-[1fr_1fr_0.95fr] gap-4">
         {/* Margin */}
         <Reveal delay={0.1}>

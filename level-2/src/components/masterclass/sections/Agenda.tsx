@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Flag, Lightbulb, Box, Palette, Mic, Ticket, ArrowRight } from "lucide-react";
 import { deck } from "@/content/masterclass";
 import { Section, Card, Reveal, Label } from "../ui";
+import { usePager } from "../Scroll";
+import { SunDial } from "../Illustrations";
 
 const icons: Record<string, typeof Flag> = { hook: Flag, think: Lightbulb, build: Box, brand: Palette, pitch: Mic, wrap: Ticket };
 // Soft tints along the day, all light.
@@ -12,9 +14,10 @@ const tints = ["#ffe3ea", "#e5e3ff", "#d9efff", "#dcf6ee", "#ffe9d6", "#f6e1f7"]
 export default function Agenda() {
   const d = deck.agenda;
   const total = d.blocks.reduce((s, b) => s + b.minutes, 0);
+  const { goTo } = usePager();
 
   return (
-    <Section id="agenda" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="agenda" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<SunDial />}>
       <Reveal delay={0.1}>
         <p className="text-[17px] sm:text-[19px] font-semibold text-ink-soft -mt-4 mb-8">{d.lead}</p>
       </Reveal>
@@ -53,7 +56,7 @@ export default function Agenda() {
           return (
             <Reveal key={b.key} delay={0.25 + i * 0.08}>
               <button
-                onClick={() => document.getElementById(b.target)?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => goTo(b.target)}
                 className="group text-left w-full h-full cursor-pointer"
               >
                 <Card className="h-full p-4 transition-transform group-hover:-translate-y-1.5">

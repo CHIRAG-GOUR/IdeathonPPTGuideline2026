@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Timer, ChevronRight } from "lucide-react";
 import { deck } from "@/content/masterclass";
+import { MicWaves } from "../Illustrations";
 import { Section, Card, Reveal, Label } from "../ui";
 import ImageSlot from "../ImageSlot";
 
@@ -13,7 +14,7 @@ export default function Pitch() {
   const total = d.slides.reduce((s, x) => s + x.sec, 0);
 
   return (
-    <Section id="pitch" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="pitch" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<MicWaves />}>
       {/* 3-minute bar, proportional to seconds */}
       <Reveal delay={0.1}>
         <Card className="p-4 sm:p-5">

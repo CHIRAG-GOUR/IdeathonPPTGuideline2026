@@ -1,17 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Maximize, Minimize, NotebookPen, ChevronUp, ChevronDown, ArrowLeft } from "lucide-react";
 import { deck } from "@/content/masterclass";
 import { useNotes } from "./Notes";
-import { useScroller } from "./Scroll";
+import { useScroller, usePager } from "./Scroll";
 
 const ids = deck.nav.map((n) => n.id);
 
-function goTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 /** Top bar, progress line, side dots, prev/next buttons and keyboard paging. */
 export default function Chrome({ homeHref }: { homeHref?: string }) {
@@ -19,6 +16,7 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
   const [full, setFull] = useState(false);
   const { show, toggle } = useNotes();
   const scroller = useScroller();
+  const { goTo, step } = usePager();
   const { scrollYProgress } = useScroll({ container: scroller });
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30 });
 
@@ -39,14 +37,6 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
     return () => io.disconnect();
   }, [scroller]);
 
-  const step = useCallback(
-    (dir: 1 | -1) => {
-      const i = ids.indexOf(active);
-      const next = ids[Math.min(ids.length - 1, Math.max(0, i + dir))];
-      goTo(next);
-    },
-    [active]
-  );
 
   // Keyboard: arrows / PageUp / PageDown / Space / Home / End, N for notes.
   useEffect(() => {
@@ -74,7 +64,7 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [step, toggle]);
+  }, [step, toggle, goTo]);
 
   useEffect(() => {
     const onFs = () => setFull(!!document.fullscreenElement);

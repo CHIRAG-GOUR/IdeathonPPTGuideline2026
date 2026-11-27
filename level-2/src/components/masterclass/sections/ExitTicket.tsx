@@ -6,14 +6,17 @@ import { Check, Package, Ticket, ArrowUp } from "lucide-react";
 import { deck } from "@/content/masterclass";
 import { Section, Card, Reveal, Label } from "../ui";
 import ImageSlot from "../ImageSlot";
+import { usePager } from "../Scroll";
+import { PlaneTicket } from "../Illustrations";
 
 export default function ExitTicket() {
   const d = deck.exit;
   const [done, setDone] = useState<boolean[]>(d.handIn.map(() => false));
   const count = done.filter(Boolean).length;
+  const { goTo } = usePager();
 
   return (
-    <Section id="exit" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
+    <Section id="exit" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<PlaneTicket />}>
       <div className="grid lg:grid-cols-[1fr_1fr_0.85fr] gap-4">
         {/* Hand-in checklist */}
         <Reveal delay={0.1}>
@@ -90,7 +93,7 @@ export default function ExitTicket() {
             {d.closing}
           </motion.p>
           <button
-            onClick={() => document.getElementById("start")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => goTo("start")}
             className="self-start sm:self-auto inline-flex items-center gap-2 rounded-xl bg-coral px-5 py-3 font-display text-[12px] font-semibold uppercase tracking-[0.15em] text-white hover:bg-coral-deep transition-colors cursor-pointer shrink-0"
           >
             Back to start <ArrowUp size={15} />

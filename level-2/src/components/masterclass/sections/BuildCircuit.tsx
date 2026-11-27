@@ -3,9 +3,11 @@
 import { motion } from "framer-motion";
 import { ShieldAlert, Radar, Cpu, Lightbulb, BatteryCharging } from "lucide-react";
 import { deck } from "@/content/masterclass";
-import { Section, Card, Reveal, Label, ToolChip } from "../ui";
+import { circuitTools } from "@/content/tools";
+import { Section, Card, Reveal, Label } from "../ui";
+import ToolPlayer from "../ToolPlayer";
 import ImageSlot from "../ImageSlot";
-import YouTubeSlot from "../YouTubeSlot";
+import { ChipPulse } from "../Illustrations";
 
 const nodeIcons = [Radar, Cpu, Lightbulb];
 
@@ -15,19 +17,13 @@ function BlockDiagram() {
   return (
     <div className="relative">
       <svg viewBox="0 0 600 190" className="w-full h-auto" aria-hidden>
-        {/* wires */}
-        {[
-          "M150 60 H225",
-          "M375 60 H450",
-          "M300 150 V100",
-        ].map((p) => (
+        {["M150 60 H225", "M375 60 H450", "M300 150 V100"].map((p) => (
           <g key={p}>
             <path d={p} stroke="#26245c" strokeOpacity="0.15" strokeWidth="6" fill="none" strokeLinecap="round" />
             <path d={p} stroke="#f0547a" strokeWidth="3" fill="none" strokeDasharray="6 6" strokeLinecap="round" style={{ animation: "mc-dash 0.8s linear infinite" }} />
           </g>
         ))}
       </svg>
-      {/* nodes on top of the svg, positioned in % to match the viewBox */}
       {d.diagram.map((n, i) => {
         const Icon = nodeIcons[i];
         const left = ["0%", "37.5%", "75%"][i];
@@ -41,7 +37,9 @@ function BlockDiagram() {
             className="absolute top-[5%] w-[25%] h-[53%] rounded-2xl bg-white border border-line shadow-md flex flex-col items-center justify-center text-center"
             style={{ left }}
           >
-            <Icon size={20} className={i === 1 ? "text-coral" : "text-ink"} />
+            <motion.span animate={i === 1 ? { scale: [1, 1.15, 1] } : {}} transition={{ repeat: Infinity, duration: 1.4 }}>
+              <Icon size={20} className={i === 1 ? "text-coral" : "text-ink"} />
+            </motion.span>
             <span className="font-display text-[12px] sm:text-[13px] font-extrabold uppercase text-ink mt-1">{n.label}</span>
             <span className="text-[10.5px] sm:text-[11.5px] font-medium text-ink-soft leading-tight px-1">{n.eg}</span>
           </motion.div>
@@ -64,8 +62,8 @@ function BlockDiagram() {
 export default function BuildCircuit() {
   const d = deck.circuit;
   return (
-    <Section id="build-circuit" eyebrow={d.eyebrow} title={d.title} notes={d.notes}>
-      <div className="grid lg:grid-cols-[1.1fr_1fr] gap-5">
+    <Section id="build-circuit" eyebrow={d.eyebrow} title={d.title} notes={d.notes} art={<ChipPulse />}>
+      <div className="grid lg:grid-cols-[1fr_1.05fr] gap-4">
         <div className="flex flex-col gap-4">
           <Reveal delay={0.1}>
             <Card className="p-5">
@@ -78,53 +76,40 @@ export default function BuildCircuit() {
           <Reveal delay={0.2}>
             <Card className="p-5">
               <Label>Workflow</Label>
-              <ol className="mt-3 grid sm:grid-cols-2 gap-x-5 gap-y-2">
+              <ol className="mt-2.5 grid sm:grid-cols-2 gap-x-5 gap-y-1.5">
                 {d.workflow.map((s, i) => (
                   <li key={s} className="flex items-start gap-2.5">
                     <span className="w-6 h-6 shrink-0 rounded-full bg-coral text-white font-mono text-[11px] font-bold flex items-center justify-center mt-0.5">
                       {i + 1}
                     </span>
-                    <span className="text-[14.5px] font-semibold text-ink leading-snug">{s}</span>
+                    <span className="text-[14px] font-semibold text-ink leading-snug">{s}</span>
                   </li>
                 ))}
               </ol>
             </Card>
           </Reveal>
+          <Reveal delay={0.3}>
+            <ImageSlot src={d.image.src} label={d.image.label} className="w-full h-[150px]" />
+          </Reveal>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <Reveal delay={0.15}>
-            <Card className="p-5">
-              <Label>Free tools</Label>
-              <div className="mt-3 flex flex-col gap-2">
-                {d.tools.map((t) => (
-                  <div key={t.name} className="flex items-center gap-3 flex-wrap">
-                    <ToolChip name={t.name} url={t.url} />
-                    <span className="text-[13.5px] font-medium text-ink-soft leading-snug">{t.desc}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            <ToolPlayer tools={circuitTools} label="Free circuit tools" />
           </Reveal>
-          <Reveal delay={0.25}>
-            <div className="rounded-3xl bg-coral-soft/80 border border-coral/30 p-5">
-              <p className="flex items-center gap-2 font-display text-[13px] font-extrabold uppercase text-coral-deep">
-                <ShieldAlert size={17} /> Safety first
+          <Reveal delay={0.3}>
+            <div className="rounded-3xl bg-coral-soft/80 border border-coral/30 px-5 py-3">
+              <p className="flex items-center gap-2 font-display text-[12.5px] font-extrabold uppercase text-coral-deep">
+                <ShieldAlert size={16} /> Safety first
               </p>
-              <ul className="mt-2 space-y-1.5">
+              <ul className="mt-1.5 grid gap-1">
                 {d.safety.map((s) => (
-                  <li key={s} className="text-[14px] font-semibold text-ink leading-snug flex gap-2">
+                  <li key={s} className="text-[13.5px] font-semibold text-ink leading-snug flex gap-2">
                     <span className="text-coral">•</span>
                     {s}
                   </li>
                 ))}
               </ul>
-            </div>
-          </Reveal>
-          <Reveal delay={0.35}>
-            <div className="grid grid-cols-2 gap-3">
-              <ImageSlot src={d.image.src} label={d.image.label} className="w-full aspect-video" rounded="rounded-2xl" />
-              <YouTubeSlot video={d.video} className="!rounded-2xl" />
             </div>
           </Reveal>
         </div>

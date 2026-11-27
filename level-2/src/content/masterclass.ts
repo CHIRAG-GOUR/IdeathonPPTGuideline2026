@@ -45,7 +45,7 @@ export const deck = {
 
   hero: {
     eyebrow: "SkilliZee Ideathon  ·  Level 2  ·  2-hour masterclass",
-    title: ["AI", "Masterclass", "Day"],
+    title: ["AI", "Masterclass"],
     words: ["Think.", "Build.", "Brand.", "Pitch."],
     tagline: "Use AI as a team member, not as the team",
     cta: "Start the day",
@@ -84,7 +84,7 @@ export const deck = {
       "Ask me 5 Whys questions one at a time about: [problem]. Wait for each answer, then summarise the root cause in one sentence.",
     toolsLabel: "Tools (free tiers)",
     tools: ["Claude", "ChatGPT", "Gemini", "NotebookLM", "Perplexity"],
-    image: { src: `${M}/think_interview.png`, label: "Students interviewing a real user" },
+    image: { src: `${M}/think_interview.webp`, label: "Students interviewing a real user" },
     notes:
       "Teach the 5 Whys live with the demo problem. Reject any Who box that says everyone or society.",
   },
@@ -122,9 +122,9 @@ export const deck = {
     credit: "3D model generated with Meshy (CC BY 4.0)",
     tip: "Image-to-3D is more reliable than text-only. Always call it a concept render.",
     angles: [
-      { src: `${M}/build3d_front.png`, label: "Front" },
-      { src: `${M}/build3d_side.png`, label: "Side" },
-      { src: `${M}/build3d_top.png`, label: "Top" },
+      { src: `${M}/build3d_front.webp`, label: "Front" },
+      { src: `${M}/build3d_side.webp`, label: "Side" },
+      { src: `${M}/build3d_top.webp`, label: "Top" },
     ],
     video: { title: "Image-to-3D walkthrough", youtubeId: null } as Video,
     notes:
@@ -160,7 +160,7 @@ export const deck = {
       "No mains voltage",
       "AI forgets resistors and mixes 3.3 V with 5 V: check the datasheet",
     ],
-    image: { src: `${M}/circuit_sim.png`, label: "Wokwi / Tinkercad simulation screenshot" },
+    image: { src: `${M}/circuit_sim.webp`, label: "Wokwi / Tinkercad simulation screenshot" },
     video: { title: "Wokwi simulator walkthrough", youtubeId: null } as Video,
     notes:
       "Teacher checks every circuit before real power. No mains voltage. AI forgets resistors and mixes 3.3 V with 5 V, so verify against a datasheet.",
@@ -190,7 +190,7 @@ export const deck = {
       { item: "Palette", tool: "Coolors" },
       { item: "Positioning statement", tool: "on one slide" },
     ],
-    image: { src: `${M}/brand_kit.png`, label: "Example Brand Kit board" },
+    image: { src: `${M}/brand_kit.webp`, label: "Example Brand Kit board" },
     notes:
       "Teams swap Brand Kits and give one compliment and one improvement. Rebuild any AI-made logo text in Canva, since AI misspells it.",
   },
@@ -224,7 +224,7 @@ export const deck = {
     ],
     sixtyLabel: "The 60-second pitch",
     sixty: ["Problem", "Who", "Solution", "Proof", "Impact", "Ask"],
-    image: { src: `${M}/pitch_stage.png`, label: "Team pitching to judges" },
+    image: { src: `${M}/pitch_stage.webp`, label: "Team pitching to judges" },
     notes: "Use the AI mock-judge prompt for rehearsal.",
   },
 
@@ -255,7 +255,7 @@ export const deck = {
     ticketLabel: "Exit ticket (one line each)",
     ticket: ["What did AI get wrong today?", "What did we fix ourselves?", "What is our next 30-day step?"],
     closing: "Use AI as a team member, not as the team.",
-    image: { src: `${M}/wrap_team.png`, label: "Team with their finished product pack" },
+    image: { src: `${M}/wrap_team.webp`, label: "Team with their finished product pack" },
     notes:
       "Collect the pack links and the exit ticket answers. Re-check free-tier limits before the next session.",
   },
