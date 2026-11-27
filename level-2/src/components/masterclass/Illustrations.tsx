@@ -69,7 +69,7 @@ export function SunDial() {
         <motion.line
           x1="55" y1="50" x2="55" y2="33"
           stroke={CORAL} strokeWidth="3.5" strokeLinecap="round"
-          style={{ originX: "55px", originY: "50px" }}
+          style={{ originX: 0.5, originY: 1 }}
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
         />
@@ -88,11 +88,11 @@ export function RootWhy() {
         <line x1="8" y1="36" x2="112" y2="36" stroke={INK} strokeOpacity="0.25" strokeWidth="2" />
         {/* stem + leaves */}
         <motion.path d="M60 36 V18" stroke="#4fb38f" strokeWidth="3" strokeLinecap="round" fill="none"
-          animate={{ scaleY: [0.9, 1, 0.9] }} style={{ originY: "36px" }} transition={{ ...loop, duration: 3 }} />
+          animate={{ scaleY: [0.9, 1, 0.9] }} style={{ originY: 1 }} transition={{ ...loop, duration: 3 }} />
         <motion.ellipse cx="52" cy="18" rx="8" ry="4.5" fill={MINT} stroke="#4fb38f" strokeWidth="1.5"
-          animate={{ rotate: [-18, -10, -18] }} style={{ originX: "60px", originY: "20px" }} transition={{ ...loop, duration: 3 }} />
+          animate={{ rotate: [-18, -10, -18] }} style={{ originX: 1, originY: 0.72 }} transition={{ ...loop, duration: 3 }} />
         <motion.ellipse cx="68" cy="14" rx="8" ry="4.5" fill={MINT} stroke="#4fb38f" strokeWidth="1.5"
-          animate={{ rotate: [18, 10, 18] }} style={{ originX: "60px", originY: "18px" }} transition={{ ...loop, duration: 3 }} />
+          animate={{ rotate: [18, 10, 18] }} style={{ originX: 0, originY: 0.94 }} transition={{ ...loop, duration: 3 }} />
         {/* root drawing down */}
         <motion.path
           d="M60 36 C 58 46, 64 52, 60 60 S 54 74, 60 80 S 64 90, 60 94"
@@ -190,7 +190,7 @@ export function ChipPulse() {
           </g>
         ))}
         <motion.rect x="34" y="26" width="52" height="52" rx="10" fill="url(#chipg)"
-          animate={{ scale: [1, 1.04, 1] }} style={{ originX: "60px", originY: "52px" }} transition={{ ...loop, duration: 1.6 }} />
+          animate={{ scale: [1, 1.04, 1] }} style={{ originX: 0.5, originY: 0.5 }} transition={{ ...loop, duration: 1.6 }} />
         <rect x="46" y="38" width="28" height="28" rx="6" fill="white" opacity="0.85" />
         <motion.circle cx="60" cy="52" r="5" fill={CORAL} animate={{ opacity: [0.4, 1, 0.4] }} transition={{ ...loop, duration: 1.2 }} />
         <defs>
@@ -293,7 +293,7 @@ export function ShieldTick() {
   return (
     <Frame>
       <svg width="110" height="104" viewBox="0 0 110 104">
-        <motion.g style={{ originX: "55px", originY: "52px" }} animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 7, ease: "linear" }}>
+        <motion.g style={{ originX: 0.5, originY: 0.5 }} animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 7, ease: "linear" }}>
           <circle cx="55" cy="52" r="44" fill="none" stroke={LAV} strokeWidth="2" strokeDasharray="3 6" />
           <circle cx="55" cy="8" r="4.5" fill={CORAL} />
         </motion.g>

@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { Maximize, Minimize, NotebookPen, ChevronUp, ChevronDown, ArrowLeft } from "lucide-react";
+import { Maximize, Minimize, ChevronUp, ChevronDown, ArrowLeft } from "lucide-react";
 import { deck } from "@/content/masterclass";
 import { useNotes } from "./Notes";
 import { useScroller, usePager } from "./Scroll";
 
 const ids = deck.nav.map((n) => n.id);
 
-
-/** Top bar, progress line, side dots, prev/next buttons and keyboard paging. */
+/** On-screen controls: brand mark (top-left, no bar), fullscreen (top-right corner),
+ *  progress line, side dots, ▲▼ buttons and keyboard paging. */
 export default function Chrome({ homeHref }: { homeHref?: string }) {
   const [active, setActive] = useState(ids[0]);
   const [full, setFull] = useState(false);
-  const { show, toggle } = useNotes();
+  const { toggle } = useNotes(); // mentor notes stay available on the N key
   const scroller = useScroller();
   const { goTo, step } = usePager();
   const { scrollYProgress } = useScroll({ container: scroller });
@@ -37,14 +37,12 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
     return () => io.disconnect();
   }, [scroller]);
 
-
-  // Keyboard: arrows / PageUp / PageDown / Space / Home / End, N for notes.
+  // Keyboard: arrows / PageUp / PageDown / Space / Home / End, F fullscreen, N notes.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       if (t.closest("input, textarea, [contenteditable=true], select")) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      // Let Space press a focused button/link instead of paging.
       if (e.key === " " && t.closest("button, a")) return;
       if (["ArrowDown", "PageDown", " "].includes(e.key)) {
         e.preventDefault();
@@ -60,6 +58,8 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
         goTo(ids[ids.length - 1]);
       } else if (e.key.toLowerCase() === "n") {
         toggle();
+      } else if (e.key.toLowerCase() === "f") {
+        toggleFull();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -72,11 +72,6 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
     return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
 
-  const toggleFull = () => {
-    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    else document.documentElement.requestFullscreen().catch(() => {});
-  };
-
   const onHero = active === ids[0];
   const activeIndex = ids.indexOf(active);
 
@@ -85,92 +80,45 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
       {/* Progress line */}
       <motion.div className="fixed top-0 left-0 right-0 h-[3px] bg-coral origin-left z-50" style={{ scaleX: progress }} />
 
-      {/* Top bar */}
-      <header
-        className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ${
-          onHero ? "py-5" : "py-3 bg-white/55 backdrop-blur-lg border-b border-white/70 shadow-[0_8px_30px_-20px_rgba(60,50,160,0.5)]"
+      {/* Brand mark, directly on the screen (no bar) */}
+      <div className="fixed top-4 left-4 sm:left-6 z-40 flex items-center gap-2.5">
+        {homeHref && (
+          <a
+            href={homeHref}
+            title="Back to Level 2"
+            className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-sm transition-colors ${
+              onHero ? "bg-white/25 text-white border-white/50 hover:bg-white/40" : "bg-white/90 text-ink border-line hover:border-coral"
+            }`}
+          >
+            <ArrowLeft size={16} />
+          </a>
+        )}
+        <button onClick={() => goTo(ids[0])} className="flex items-center gap-2.5 cursor-pointer" aria-label="Back to start">
+          <span className="relative w-9 h-9 rounded-full bg-coral overflow-hidden shadow-md">
+            <span className="absolute -right-2 top-2 w-5 h-5 rounded-full bg-white/90" />
+          </span>
+          <span className="text-left leading-none" style={{ textShadow: onHero ? "0 2px 12px rgba(70,60,170,0.35)" : "0 1px 8px rgba(255,255,255,0.8)" }}>
+            <span className={`block font-display font-extrabold text-[15px] tracking-wide transition-colors ${onHero ? "text-white" : "text-ink"}`}>
+              {deck.meta.brand}
+            </span>
+            <span className={`block font-mono text-[10.5px] tracking-[0.22em] uppercase mt-0.5 transition-colors ${onHero ? "text-white/90" : "text-ink-soft"}`}>
+              {deck.meta.product}
+            </span>
+          </span>
+        </button>
+      </div>
+
+      {/* Fullscreen: top-right corner */}
+      <button
+        onClick={toggleFull}
+        title={full ? "Exit fullscreen (F)" : "Fullscreen (F)"}
+        aria-label={full ? "Exit fullscreen" : "Fullscreen"}
+        className={`fixed top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center border shadow-md cursor-pointer transition-colors ${
+          onHero ? "bg-white/25 text-white border-white/50 hover:bg-white/40" : "bg-white/90 text-ink border-line hover:border-coral hover:text-coral"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-0 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-          {homeHref && (
-            <a
-              href={homeHref}
-              title="Back to Level 2"
-              className={`w-9 h-9 rounded-full flex items-center justify-center border transition-colors ${
-                onHero ? "bg-white/20 text-white border-white/40 hover:bg-white/30" : "bg-white text-ink border-line hover:border-coral"
-              }`}
-            >
-              <ArrowLeft size={16} />
-            </a>
-          )}
-          <button onClick={() => goTo(ids[0])} className="flex items-center gap-2.5 cursor-pointer" aria-label="Back to start">
-            <span className="relative w-8 h-8 rounded-full bg-coral overflow-hidden shadow-md">
-              <span className="absolute -right-2 top-2 w-5 h-5 rounded-full bg-white/90" />
-            </span>
-            <span className="text-left leading-none">
-              <span className={`block font-display font-extrabold text-[13px] tracking-wide ${onHero ? "text-white" : "text-ink"}`}>
-                {deck.meta.brand}
-              </span>
-              <span className={`block font-mono text-[10px] tracking-[0.2em] uppercase ${onHero ? "text-white/85" : "text-ink-soft"}`}>
-                {deck.meta.product}
-              </span>
-            </span>
-          </button>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8">
-            {deck.topLinks.map((l) => {
-              const isOn =
-                active === l.id ||
-                (l.id === "build-3d" && active === "build-circuit") ||
-                (l.id === "think" && active === "problem-card") ||
-                (l.id === "money" && active === "pitch");
-              return (
-                <button
-                  key={l.id}
-                  onClick={() => goTo(l.id)}
-                  className={`relative text-[14px] font-semibold cursor-pointer transition-colors ${
-                    onHero ? "text-white/90 hover:text-white" : isOn ? "text-coral" : "text-ink hover:text-coral"
-                  }`}
-                >
-                  {l.label}
-                  <span className="font-mono">_</span>
-                  {isOn && !onHero && (
-                    <motion.span layoutId="navline" className="absolute -bottom-1.5 left-0 right-2 h-[2px] rounded bg-coral" />
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggle}
-              title="Mentor notes (N)"
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-semibold border cursor-pointer transition-colors ${
-                show
-                  ? "bg-coral text-white border-coral"
-                  : onHero
-                  ? "bg-white/20 text-white border-white/40 hover:bg-white/30"
-                  : "bg-white text-ink border-line hover:border-coral"
-              }`}
-            >
-              <NotebookPen size={15} />
-              <span className="hidden sm:inline">Notes</span>
-            </button>
-            <button
-              onClick={toggleFull}
-              title="Fullscreen"
-              className={`w-9 h-9 rounded-full flex items-center justify-center border cursor-pointer transition-colors ${
-                onHero ? "bg-white/20 text-white border-white/40 hover:bg-white/30" : "bg-white text-ink border-line hover:border-coral"
-              }`}
-            >
-              {full ? <Minimize size={16} /> : <Maximize size={16} />}
-            </button>
-          </div>
-        </div>
-      </header>
+        {full ? <Minimize size={17} /> : <Maximize size={17} />}
+      </button>
 
       {/* Side dots */}
       <nav className="fixed right-4 lg:right-6 top-1/2 -translate-y-1/2 z-40 hidden sm:flex flex-col gap-2.5" aria-label="Pages">
@@ -197,7 +145,7 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
           onClick={() => step(-1)}
           disabled={activeIndex === 0}
           aria-label="Previous page"
-          className="w-10 h-10 rounded-full bg-white/85 backdrop-blur border border-line text-ink shadow-md flex items-center justify-center hover:bg-coral hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+          className="w-10 h-10 rounded-full bg-white/85 border border-line text-ink shadow-md flex items-center justify-center hover:bg-coral hover:text-white transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
         >
           <ChevronUp size={20} />
         </button>
@@ -212,4 +160,9 @@ export default function Chrome({ homeHref }: { homeHref?: string }) {
       </div>
     </>
   );
+}
+
+function toggleFull() {
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  else document.documentElement.requestFullscreen().catch(() => {});
 }

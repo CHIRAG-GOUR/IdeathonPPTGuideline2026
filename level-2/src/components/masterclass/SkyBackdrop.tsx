@@ -12,6 +12,10 @@ function interp(v: number, input: number[], output: number[]) {
   const t = (v - input[i]) / (input[i + 1] - input[i]);
   return output[i] + (output[i + 1] - output[i]) * t;
 }
+/** Scroll-linked value with a unit (e.g. "vw"), computed exactly in JS. */
+function useLerp(p: MotionValue<number>, input: number[], output: number[], unit: string) {
+  return useTransform(p, (v) => `${interp(v, input, output)}${unit}`);
+}
 /** Scroll-linked opacity that is always exact (function form = no WAAPI acceleration). */
 function useFade(p: MotionValue<number>, input: number[], output: number[]) {
   return useTransform(p, (v) => interp(v, input, output));
@@ -33,24 +37,24 @@ function useFade(p: MotionValue<number>, input: number[], output: number[]) {
  * and all motion is transform/opacity (GPU-composited).
  */
 
-const STOPS = [0, 0.17, 0.34, 0.5, 0.66, 0.83, 1];
+const STOPS = [0, 0.15, 0.3, 0.45, 0.6, 0.73, 0.86];
 const SKIES = [
   ["#9aa4ff", "#d5d0ff", "#ffe4d6"], // dawn
   ["#a3c9ff", "#d6e8ff", "#eef5ff"], // morning
   ["#b3defd", "#def3ff", "#f6fbff"], // noon
   ["#c8d3ff", "#e9e6ff", "#fff2ea"], // afternoon
   ["#ffcfb3", "#ffe3cf", "#fff3e6"], // golden hour
-  ["#d9bff2", "#ecd9f7", "#fde9f3"], // dusk
-  ["#9fa9f0", "#c9cdfa", "#e4e6ff"], // moonlit (still light)
+  ["#f3b7c9", "#f9cfd0", "#ffe6da"], // sunset
+  ["#7f88dc", "#a9aef0", "#d6d8fb"], // night (soft periwinkle, stars visible)
 ];
 
-// Timeline (scroll progress 0..1)
+// Timeline (scroll progress 0..1). Pages sit at 0, 0.1, 0.2 … 1.
 const T = {
-  dayEnd: 0.72, // birds, balloon, sun rays start to fade
-  seaIn: [0.66, 0.88],
-  toMoon: [0.72, 0.86],
-  set: [0.86, 1],
-  ship: [0.76, 1],
+  day: [0.6, 0.74], // birds, balloon, light shafts fade out
+  seaIn: [0.58, 0.74], // the sea rises from the bottom
+  sunSet: [0.72, 0.84], // the sun goes down behind the sea
+  moonRise: [0.84, 1], // the moon comes up from behind the sea
+  ship: [0.68, 1],
 };
 
 const CLOUDS = [
@@ -210,6 +214,23 @@ function Ship() {
   );
 }
 
+/** Shimmering reflection column on the water, under a sun/moon at horizontal position `x`. */
+function Glint({ x, opacity, color }: { x: MotionValue<string>; opacity: MotionValue<number>; color: string }) {
+  return (
+    <motion.div className="absolute top-[4%] h-[72%] w-24" style={{ x, opacity, marginLeft: 32 }}>
+      <div
+        className="w-full h-full"
+        style={{
+          background: `repeating-linear-gradient(180deg, rgba(${color},0.95) 0 5px, transparent 5px 14px)`,
+          maskImage: "linear-gradient(180deg, black, transparent)",
+          WebkitMaskImage: "linear-gradient(180deg, black, transparent)",
+          animation: "mc-shimmer 2.4s ease-in-out infinite",
+        }}
+      />
+    </motion.div>
+  );
+}
+
 /** One looping wave strip (twice the screen wide, slid left forever). */
 function WaveStrip({ top, color, foam, dur, amp, reverse }: { top: string; color: string; foam: number; dur: number; amp: number; reverse?: boolean }) {
   const W = 2880;
@@ -242,19 +263,19 @@ export default function SkyBackdrop() {
   const scroller = useScroller();
   const { scrollYProgress: p, scrollY } = useScroll({ container: scroller });
 
-  // Sun / moon path: rise left → peak → descend right → sink into the sea.
-  const bodyX = useTransform(p, [0, 0.45, T.toMoon[1], 1], ["6vw", "40vw", "68vw", "78vw"]);
-  const bodyY = useTransform(p, [0, 0.45, T.toMoon[1], 1], ["30vh", "6vh", "40vh", "86vh"]);
-  const sunO = useFade(p, T.toMoon, [1, 0]);
-  const moonO = useFade(p, T.toMoon, [0, 1]);
-  const bodyScale = useTransform(p, [T.toMoon[0], T.set[1]], [1, 0.9]);
+  // Sun: rise left → peak → descend → set behind the sea.
+  const sunX = useLerp(p, [0, 0.45, T.sunSet[0], T.sunSet[1]], [6, 40, 60, 64], "vw");
+  const sunY = useLerp(p, [0, 0.45, T.sunSet[0], T.sunSet[1]], [30, 6, 50, 94], "vh");
+  // Moon: rises from behind the sea on the other side, climbs into the night sky.
+  const moonX = useLerp(p, T.moonRise, [20, 26], "vw");
+  const moonY = useLerp(p, T.moonRise, [94, 14], "vh");
 
-  const dayO = useFade(p, [T.dayEnd - 0.06, T.dayEnd + 0.1], [1, 0]); // birds, balloon, rays
-  const starsO = useFade(p, [0.78, 0.95], [0, 1]);
-  const seaY = useTransform(p, T.seaIn, ["105%", "0%"]);
-  const shipX = useTransform(p, T.ship, ["-16vw", "64vw"]);
-  const glintO = useFade(p, [0.84, 0.93, 1], [0, 0.9, 0.35]);
-  const glintX = useTransform(p, [T.toMoon[1], 1], ["68vw", "78vw"]);
+  const dayO = useFade(p, T.day, [1, 0]); // birds, balloon, rays
+  const starsO = useFade(p, [0.76, 0.92], [0, 1]);
+  const seaY = useLerp(p, T.seaIn, [105, 0], "%");
+  const shipX = useLerp(p, T.ship, [-16, 62], "vw");
+  const sunGlintO = useFade(p, [0.66, 0.76, 0.84], [0, 0.85, 0]);
+  const moonGlintO = useFade(p, [0.86, 0.93, 1], [0, 0.9, 0.55]);
   const balloonY = useTransform(scrollY, [0, 5000], [0, -420]);
 
   return (
@@ -281,47 +302,47 @@ export default function SkyBackdrop() {
         ))}
       </motion.div>
 
-      {/* Sun ↔ Moon (one body that changes) */}
-      <motion.div className="absolute" style={{ x: bodyX, y: bodyY, scale: bodyScale, willChange: "transform" }}>
+      {/* Moon: rises from behind the sea at night */}
+      <motion.div className="absolute" style={{ x: moonX, y: moonY, willChange: "transform" }}>
         <div className="relative w-40 h-40">
-          {/* warm sun */}
-          <motion.div className="absolute inset-0" style={{ opacity: sunO }}>
-            <div
-              className="absolute -inset-40 rounded-full opacity-60"
-              style={{ background: "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%)" }}
-            />
-            <div
-              className="absolute -inset-24 opacity-30"
-              style={{
-                background: "repeating-conic-gradient(from 0deg, rgba(255,255,255,0.9) 0deg 4deg, transparent 4deg 18deg)",
-                maskImage: "radial-gradient(circle, black 20%, transparent 70%)",
-                WebkitMaskImage: "radial-gradient(circle, black 20%, transparent 70%)",
-                animation: "mc-spin 90s linear infinite",
-              }}
-            />
-            <div
-              className="absolute inset-6 rounded-full"
-              style={{ background: "radial-gradient(circle at 40% 40%, #fffdf0, #ffe7a8 70%)", boxShadow: "0 0 60px 20px rgba(255,236,180,0.6)" }}
-            />
-          </motion.div>
-          {/* cool moon */}
-          <motion.div className="absolute inset-0" style={{ opacity: moonO }}>
-            <div
-              className="absolute -inset-24 rounded-full"
-              style={{ background: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(245,246,255,0) 64%)" }}
-            />
-            <div
-              className="absolute inset-7 rounded-full overflow-hidden"
-              style={{
-                background: "radial-gradient(circle at 38% 35%, #ffffff, #f1f2ff 70%)",
-                boxShadow: "0 0 0 3px rgba(255,255,255,0.9), 0 0 40px 14px rgba(255,255,255,0.95), 0 0 120px 40px rgba(236,238,255,0.8)",
-              }}
-            >
-              <span className="absolute left-[22%] top-[28%] w-5 h-5 rounded-full bg-[#dfe3fb]" />
-              <span className="absolute left-[56%] top-[54%] w-7 h-7 rounded-full bg-[#dfe3fb]" />
-              <span className="absolute left-[40%] top-[70%] w-3 h-3 rounded-full bg-[#dfe3fb]" />
-            </div>
-          </motion.div>
+          <div
+            className="absolute -inset-24 rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(245,246,255,0) 64%)" }}
+          />
+          <div
+            className="absolute inset-7 rounded-full overflow-hidden"
+            style={{
+              background: "radial-gradient(circle at 38% 35%, #ffffff, #f1f2ff 70%)",
+              boxShadow: "0 0 0 3px rgba(255,255,255,0.9), 0 0 40px 14px rgba(255,255,255,0.95), 0 0 120px 40px rgba(236,238,255,0.8)",
+            }}
+          >
+            <span className="absolute left-[22%] top-[28%] w-5 h-5 rounded-full bg-[#dfe3fb]" />
+            <span className="absolute left-[56%] top-[54%] w-7 h-7 rounded-full bg-[#dfe3fb]" />
+            <span className="absolute left-[40%] top-[70%] w-3 h-3 rounded-full bg-[#dfe3fb]" />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Sun: arcs over the day, then sets behind the sea */}
+      <motion.div className="absolute" style={{ x: sunX, y: sunY, willChange: "transform" }}>
+        <div className="relative w-40 h-40">
+          <div
+            className="absolute -inset-40 rounded-full opacity-60"
+            style={{ background: "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%)" }}
+          />
+          <div
+            className="absolute -inset-24 opacity-30"
+            style={{
+              background: "repeating-conic-gradient(from 0deg, rgba(255,255,255,0.9) 0deg 4deg, transparent 4deg 18deg)",
+              maskImage: "radial-gradient(circle, black 20%, transparent 70%)",
+              WebkitMaskImage: "radial-gradient(circle, black 20%, transparent 70%)",
+              animation: "mc-spin 90s linear infinite",
+            }}
+          />
+          <div
+            className="absolute inset-6 rounded-full"
+            style={{ background: "radial-gradient(circle at 40% 40%, #fffdf0, #ffd58a 72%)", boxShadow: "0 0 60px 20px rgba(255,220,160,0.65)" }}
+          />
         </div>
       </motion.div>
 
@@ -354,19 +375,9 @@ export default function SkyBackdrop() {
       <motion.div className="absolute inset-x-0 bottom-0 h-[30vh]" style={{ y: seaY, willChange: "transform" }}>
         <div className="absolute -top-4 inset-x-0 h-8 bg-gradient-to-b from-transparent to-white/60 blur-md" />
         <WaveStrip top="0%" color="#c9e9fc" foam={0.7} dur={22} amp={14} />
-        {/* moon glint on the water */}
-        <motion.div className="absolute top-[6%] h-[70%] w-24 -ml-12" style={{ x: glintX, opacity: glintO }}>
-          <div
-            className="w-full h-full"
-            style={{
-              background:
-                "repeating-linear-gradient(180deg, rgba(255,255,255,0.95) 0 5px, transparent 5px 14px)",
-              maskImage: "linear-gradient(180deg, black, transparent)",
-              WebkitMaskImage: "linear-gradient(180deg, black, transparent)",
-              animation: "mc-shimmer 2.4s ease-in-out infinite",
-            }}
-          />
-        </motion.div>
+        {/* Sun glint (warm) while it sets, moon glint (silver) while it rises */}
+        <Glint x={sunX} opacity={sunGlintO} color="255,214,150" />
+        <Glint x={moonX} opacity={moonGlintO} color="255,255,255" />
         {/* ship rides between the back and front waves */}
         <motion.div className="absolute top-[-6%] left-0" style={{ x: shipX, willChange: "transform" }}>
           <div style={{ animation: "mc-bob 3.2s ease-in-out infinite", transformOrigin: "50% 90%" }}>
